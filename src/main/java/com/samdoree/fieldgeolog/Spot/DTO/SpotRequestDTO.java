@@ -1,11 +1,11 @@
-package com.samdoree.fieldgeolog.GeoPoint.DTO;
+package com.samdoree.fieldgeolog.Spot.DTO;
 
 import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
-public class GeoPointRequestDTO {
+public class SpotRequestDTO {
 
     @NotNull
     private Double latitude;

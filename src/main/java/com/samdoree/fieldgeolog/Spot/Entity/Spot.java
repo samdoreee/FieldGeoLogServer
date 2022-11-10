@@ -1,6 +1,6 @@
-package com.samdoree.fieldgeolog.GeoPoint.Entity;
+package com.samdoree.fieldgeolog.Spot.Entity;
 
-import com.samdoree.fieldgeolog.GeoPoint.DTO.GeoPointRequestDTO;
+import com.samdoree.fieldgeolog.Spot.DTO.SpotRequestDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class GeoPoint {
+public class Spot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,16 +26,16 @@ public class GeoPoint {
     @CreatedDate
     private LocalDateTime createDT;  // 시간
 
-    public static GeoPoint createGeoPoint(GeoPointRequestDTO geoPointRequestDTO) {
-        return GeoPoint.builder()
-                .latitude(geoPointRequestDTO.getLatitude())
-                .longitude(geoPointRequestDTO.getLongitude())
+    public static Spot createGeoPoint(SpotRequestDTO spotRequestDTO) {
+        return Spot.builder()
+                .latitude(spotRequestDTO.getLatitude())
+                .longitude(spotRequestDTO.getLongitude())
                 .createDT(LocalDateTime.now())
                 .build();
     }
 
     @Builder
-    private GeoPoint(Double latitude, Double longitude, LocalDateTime createDT) {
+    private Spot(Double latitude, Double longitude, LocalDateTime createDT) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.createDT = createDT;
