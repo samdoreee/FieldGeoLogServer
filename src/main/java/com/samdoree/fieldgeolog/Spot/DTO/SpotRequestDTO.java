@@ -17,7 +17,7 @@ public class SpotRequestDTO {
 
     private LocalDateTime createDT;
 
-    public Spot toEntity() {
+    public Spot toEntity() throws Exception {
         return Spot.builder()
                 .latitude(latitude)
                 .longitude(longitude)

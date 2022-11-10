@@ -16,11 +16,14 @@ public class SpotResponseDTO {
     private Double longitude;
     private LocalDateTime createDt;
 
+    private String weatherInfo;
+
     public SpotResponseDTO(Spot spot) {
         this.id = spot.getId();
         this.latitude = spot.getLatitude();
         this.longitude = spot.getLongitude();
         this.createDt = spot.getCreateDT();
+        this.weatherInfo = spot.getWeatherInfo();
     }
 
     public static SpotResponseDTO from(Spot spot) {

@@ -1,6 +1,7 @@
 package com.samdoree.fieldgeolog.Spot.Entity;
 
 import com.samdoree.fieldgeolog.Spot.DTO.SpotRequestDTO;
+import com.samdoree.fieldgeolog.Spot.Service.WeatherApi;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,13 +25,18 @@ public class Spot {
     private Double longitude;    // 경도(세로 좌표)
 
     @CreatedDate
-    private LocalDateTime createDT;  // 시간
+    private LocalDateTime createDT;
+
+    private String weatherInfo; // 날씨 정보
 
     @Builder
-    private Spot(Double latitude, Double longitude, LocalDateTime createDT) {
+    private Spot(Double latitude, Double longitude, LocalDateTime createDT) throws Exception {
         this.latitude = latitude;
         this.longitude = longitude;
         this.createDT = createDT;
+
+        WeatherApi weatherApi = new WeatherApi();
+        this.weatherInfo = weatherApi.restApiGetWeather(createDT, latitude, longitude);
     }
 
     public Spot(SpotRequestDTO SpotRequestDTO) {
