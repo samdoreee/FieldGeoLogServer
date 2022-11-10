@@ -26,14 +26,6 @@ public class Spot {
     @CreatedDate
     private LocalDateTime createDT;  // 시간
 
-    public static Spot createGeoPoint(SpotRequestDTO spotRequestDTO) {
-        return Spot.builder()
-                .latitude(spotRequestDTO.getLatitude())
-                .longitude(spotRequestDTO.getLongitude())
-                .createDT(LocalDateTime.now())
-                .build();
-    }
-
     @Builder
     private Spot(Double latitude, Double longitude, LocalDateTime createDT) {
         this.latitude = latitude;
@@ -41,4 +33,9 @@ public class Spot {
         this.createDT = createDT;
     }
 
+    public Spot(SpotRequestDTO SpotRequestDTO) {
+        this.latitude = SpotRequestDTO.getLatitude();
+        this.longitude = SpotRequestDTO.getLongitude();
+        this.createDT = SpotRequestDTO.getCreateDT();
+    }
 }
