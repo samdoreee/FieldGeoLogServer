@@ -17,7 +17,7 @@ public class SpotRegisterService {
 
     @Transactional
     public SpotResponseDTO addSpot(SpotRequestDTO spotRequestDTO) {
-        Spot spot = spotRepository.save(spotRequestDTO.toEntity());
+        Spot spot = spotRepository.save(Spot.createFrom(spotRequestDTO));
         return SpotResponseDTO.from(spot);
     }
 }
