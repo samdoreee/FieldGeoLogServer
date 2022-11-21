@@ -23,6 +23,8 @@ ext {
 	set('snippetsDir', file("build/generated-snippets"))
 }
 
+def restAssuredVersion = '5.2.0'
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -32,6 +34,19 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	// e2e 테스트용 rest-assured 라이브러리
+	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+	testImplementation "io.rest-assured:json-path:${restAssuredVersion}"
+	modules {
+		module("org.codehaus.groovy:groovy") {
+			replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
+		}
+		module("org.codehaus.groovy:groovy-xml") {
+			replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
+		}
+	}
+	// 테스트용 in-memory database
+	runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
