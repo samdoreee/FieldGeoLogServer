@@ -1,7 +1,6 @@
 package com.samdoree.fieldgeolog.Spot.Entity;
 
 import com.samdoree.fieldgeolog.Spot.DTO.SpotRequestDTO;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -26,16 +25,13 @@ public class Spot {
     @CreatedDate
     private LocalDateTime createDT;  // 시간
 
-    @Builder
-    private Spot(Double latitude, Double longitude, LocalDateTime createDT) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.createDT = createDT;
+    static public Spot createFrom(SpotRequestDTO spotRequestDTO) {
+        return new Spot(spotRequestDTO);
     }
 
-    public Spot(SpotRequestDTO SpotRequestDTO) {
-        this.latitude = SpotRequestDTO.getLatitude();
-        this.longitude = SpotRequestDTO.getLongitude();
-        this.createDT = SpotRequestDTO.getCreateDT();
+    private Spot(SpotRequestDTO spotRequestDTO) {
+        this.latitude = spotRequestDTO.getLatitude();
+        this.longitude = spotRequestDTO.getLongitude();
+        this.createDT = LocalDateTime.now();
     }
 }
