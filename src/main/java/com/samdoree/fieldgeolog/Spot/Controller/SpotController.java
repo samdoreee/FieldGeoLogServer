@@ -21,19 +21,19 @@ public class SpotController {
 
     // GPS 기록 생성
     @PostMapping("/api/spots")
-    public SpotResponseDTO SpotAdd(@Valid @RequestBody SpotRequestDTO SpotRequestDTO) throws Exception {
+    public SpotResponseDTO addSpot(@Valid @RequestBody SpotRequestDTO SpotRequestDTO) {
         return SpotRegisterService.addSpot(SpotRequestDTO);
     }
 
     // GPS 기록 조회
     @GetMapping("/api/spots")
-    public List<SpotResponseDTO> SpotList() {
-        return SpotSearchService.findSpots();
+    public List<SpotResponseDTO> getAllSpotList() {
+        return SpotSearchService.getAllSpotList();
     }
 
     // GPS 기록 삭제
     @DeleteMapping("/api/spots/{spotId}")
-    public Boolean SpotRemove(@PathVariable Long spotId) {
+    public Boolean removeSpot(@PathVariable Long spotId) {
         return SpotRemoveService.removeSpot(spotId);
     }
 }
