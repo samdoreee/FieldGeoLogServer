@@ -16,7 +16,7 @@ public class SpotRegisterService {
     private final SpotRepository spotRepository;
 
     @Transactional
-    public SpotResponseDTO addSpot(SpotRequestDTO spotRequestDTO) {
+    public SpotResponseDTO addSpot(SpotRequestDTO spotRequestDTO) throws Exception {
         Spot spot = spotRepository.save(Spot.createFrom(spotRequestDTO));
         return SpotResponseDTO.from(spot);
     }

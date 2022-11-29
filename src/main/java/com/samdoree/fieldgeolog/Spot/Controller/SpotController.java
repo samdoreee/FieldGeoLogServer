@@ -21,7 +21,7 @@ public class SpotController {
 
     // GPS 기록 생성
     @PostMapping("/api/spots")
-    public SpotResponseDTO addSpot(@Valid @RequestBody SpotRequestDTO SpotRequestDTO) {
+    public SpotResponseDTO addSpot(@Valid @RequestBody SpotRequestDTO SpotRequestDTO) throws Exception {
         return SpotRegisterService.addSpot(SpotRequestDTO);
     }
 

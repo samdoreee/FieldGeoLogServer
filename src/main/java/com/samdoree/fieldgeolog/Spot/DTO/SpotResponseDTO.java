@@ -15,7 +15,6 @@ public class SpotResponseDTO {
     private Double latitude;
     private Double longitude;
     private LocalDateTime createDt;
-
     private String weatherInfo;
 
     public SpotResponseDTO(Spot spot) {

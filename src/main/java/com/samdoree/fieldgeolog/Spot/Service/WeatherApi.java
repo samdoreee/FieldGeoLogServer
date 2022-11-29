@@ -9,19 +9,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class WeatherApi {
 
-    public String restApiGetWeather(LocalDateTime createDT, Double latitude, Double longitude) throws Exception {
+    public String restApiGetWeather(LocalDateTime createDT, Double X, Double Y) throws Exception {
 
         // 변수 설정
         String apiURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";   // 단수예보 조회
         String authKey = ""; // 본인 서비스 키 입력
 
-        String nx = "69";
-        String ny = "100";
-        String baseDate = "20221110";
-        String baseTime = "2000";
+        String baseDate = createDT.format(DateTimeFormatter.BASIC_ISO_DATE);
+        String baseTime = createDT.format(DateTimeFormatter.ofPattern("hhmm"));
+        System.out.println("시간: "+baseTime);
         String dataType = "JSON";
 
         StringBuilder urlBuilder = new StringBuilder(apiURL);
@@ -31,8 +31,8 @@ public class WeatherApi {
         urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode(dataType, "UTF-8")); // 받으려는 타입
         urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(baseDate, "UTF-8")); /* 조회하고싶은 날짜*/
         urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode(baseTime, "UTF-8")); /* 조회하고싶은 시간 AM 02시부터 3시간 단위 */
-        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(nx, "UTF-8")); //경도
-        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(ny, "UTF-8")); //위도
+        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(Y.intValue()), "UTF-8")); //경도
+        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(X.intValue()), "UTF-8")); //위도
 
         URL url = new URL(urlBuilder.toString());
         System.out.println(url);
