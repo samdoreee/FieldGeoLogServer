@@ -1,0 +1,27 @@
+= 삼돌이 API Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== Spot API
+
+{blank} +
+
+=== Spot 추가
+==== Request Path Parameters
+==== Request Query Parameters
+==== Request Body Fields
+include::{snippets}/add-spot/request-fields.adoc[]
+==== Response Body Fields
+include::{snippets}/add-spot/response-fields.adoc[]
+==== HTTP 통신 예제
+===== HTTP request
+include::{snippets}/add-spot/http-request.adoc[]
+===== HTTP response
+include::{snippets}/add-spot/http-response.adoc[]
+
+{blank} +
+
