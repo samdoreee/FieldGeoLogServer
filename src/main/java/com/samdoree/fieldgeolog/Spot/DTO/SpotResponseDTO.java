@@ -14,13 +14,13 @@ public class SpotResponseDTO {
     private Long id;
     private Double latitude;
     private Double longitude;
-    private LocalDateTime createDt;
+    private LocalDateTime createDT;
 
     public SpotResponseDTO(Spot spot) {
         this.id = spot.getId();
         this.latitude = spot.getLatitude();
         this.longitude = spot.getLongitude();
-        this.createDt = spot.getCreateDT();
+        this.createDT = spot.getCreateDT();
     }
 
     public static SpotResponseDTO from(Spot spot) {

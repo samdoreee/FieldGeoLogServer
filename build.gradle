@@ -19,7 +19,7 @@ repositories {
 	mavenCentral()
 }
 
-def restAssuredVersion = '5.2.0'
+def restAssuredVersion = '4.1.2'
 
 configurations {
 	asciidoctorExtensions
@@ -36,6 +36,7 @@ dependencies {
 	// e2e 테스트용 rest-assured 라이브러리
 	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
 	testImplementation "io.rest-assured:json-path:${restAssuredVersion}"
+	testImplementation "io.rest-assured:xml-path:${restAssuredVersion}"
 	modules {
 		module("org.codehaus.groovy:groovy") {
 			replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
