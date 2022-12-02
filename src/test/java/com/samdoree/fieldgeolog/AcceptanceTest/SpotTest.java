@@ -1,5 +1,6 @@
 package com.samdoree.fieldgeolog.AcceptanceTest;
 
+import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import io.restassured.http.ContentType;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
@@ -50,7 +51,7 @@ class SpotTest {
             put("longitude", 200.0);
         }};
         LocalDateTime timeBeforeRequest = LocalDateTime.now();
-        ResponseBody body = given()
+        Spot spot = given()
                 .spec(basicRequest).basePath("/api/spots")
                 .accept("application/json")
                 .contentType(ContentType.JSON).body(requestBody)
@@ -65,17 +66,16 @@ class SpotTest {
                                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("id"),
                                 fieldWithPath("latitude").type(JsonFieldType.NUMBER).description("위도"),
                                 fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도"),
-                                fieldWithPath("createDt").type(JsonFieldType.STRING).description("기록된 날짜")
+                                fieldWithPath("createDT").type(JsonFieldType.STRING).description("기록된 날짜")
                         )
                 )).when().post()
                 .then().statusCode(200)
-                .extract().response().body();
+                .extract().response().body().as(Spot.class);
         LocalDateTime timeAfterRequest = LocalDateTime.now();
 
-        assertThat(body.jsonPath().getDouble("latitude")).isEqualTo(requestBody.get("latitude"));
-        assertThat(body.jsonPath().getDouble("longitude")).isEqualTo(requestBody.get("longitude"));
-        LocalDateTime createDt = LocalDateTime.parse(body.jsonPath().getString("createDt"));
-        assertThat(timeBeforeRequest.compareTo(createDt) < 0 && createDt.compareTo(timeAfterRequest) < 0).isTrue();
+        assertThat(spot.getLatitude()).isEqualTo(requestBody.get("latitude"));
+        assertThat(spot.getLongitude()).isEqualTo(requestBody.get("longitude"));
+        assertThat(timeBeforeRequest.compareTo(spot.getCreateDT()) < 0 && spot.getCreateDT().compareTo(timeAfterRequest) < 0).isTrue();
     }
 
     @Test

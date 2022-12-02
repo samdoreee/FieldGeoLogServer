@@ -1,9 +1,7 @@
 package com.samdoree.fieldgeolog.Spot.Entity;
 
 import com.samdoree.fieldgeolog.Spot.DTO.SpotRequestDTO;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor
+@EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 public class Spot {
 
