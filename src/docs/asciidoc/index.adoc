@@ -25,3 +25,17 @@ include::{snippets}/add-spot/http-response.adoc[]
 
 {blank} +
 
+=== 모든 Spot 읽어오기
+==== Request Path Parameters
+==== Request Query Parameters
+==== Request Body Fields
+==== Response Body Fields
+include::{snippets}/read-all-spot/response-fields.adoc[]
+==== HTTP 통신 예제
+===== HTTP request
+include::{snippets}/read-all-spot/http-request.adoc[]
+===== HTTP response
+include::{snippets}/read-all-spot/http-response.adoc[]
+
+{blank} +
+
