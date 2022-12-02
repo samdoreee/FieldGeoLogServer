@@ -17,7 +17,7 @@ public class SpotSearchService {
 
     private final SpotRepository spotRepository;
 
-    public List<SpotResponseDTO> findSpots() {
+    public List<SpotResponseDTO> getAllSpotList() {
         List<Spot> spots = spotRepository.findAll();
         return spots.stream().map(SpotResponseDTO::new).collect(Collectors.toList());
     }
