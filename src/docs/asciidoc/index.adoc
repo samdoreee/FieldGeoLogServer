@@ -11,8 +11,6 @@
 {blank} +
 
 === Spot 추가
-==== Request Path Parameters
-==== Request Query Parameters
 ==== Request Body Fields
 include::{snippets}/add-spot/request-fields.adoc[]
 ==== Response Body Fields
@@ -26,9 +24,6 @@ include::{snippets}/add-spot/http-response.adoc[]
 {blank} +
 
 === 모든 Spot 읽어오기
-==== Request Path Parameters
-==== Request Query Parameters
-==== Request Body Fields
 ==== Response Body Fields
 include::{snippets}/read-all-spot/response-fields.adoc[]
 ==== HTTP 통신 예제
@@ -36,6 +31,17 @@ include::{snippets}/read-all-spot/response-fields.adoc[]
 include::{snippets}/read-all-spot/http-request.adoc[]
 ===== HTTP response
 include::{snippets}/read-all-spot/http-response.adoc[]
+
+{blank} +
+
+=== 특정 Spot 삭제하기
+==== Request Path Parameters
+include::{snippets}/remove-spot/path-parameters.adoc[]
+==== HTTP 통신 예제
+===== HTTP request
+include::{snippets}/remove-spot/http-request.adoc[]
+===== HTTP response
+include::{snippets}/remove-spot/http-response.adoc[]
 
 {blank} +
 
