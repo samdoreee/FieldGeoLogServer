@@ -23,7 +23,10 @@ import static com.samdoree.fieldgeolog.ApiDocumentUtils.getDocumentRequest;
 import static com.samdoree.fieldgeolog.ApiDocumentUtils.getDocumentResponse;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
@@ -119,5 +122,23 @@ class SpotTest {
     @Test
     @DisplayName("Spot 삭제하기")
     void deleteSpot() {
+        Long deleteSpotId = preGeneratedSpots.get(0).getId();
+        given()
+                .spec(basicRequest).basePath("/api/spots")
+                .pathParams("spotId", deleteSpotId)
+                .accept("application/json")
+                .contentType(ContentType.JSON)
+                .filter(document("remove-spot",
+                        getDocumentRequest(),
+                        getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("spotId").description("spot id")
+                        )
+                )).when().delete("/{spotId}")
+                .then()
+                .log().all()
+                .body(equalTo("true"))
+                .statusCode(200);
+        assertThat(spotRepository.findAll()).hasSameElementsAs(preGeneratedSpots.subList(1, preGeneratedSpots.size()));
     }
 }
