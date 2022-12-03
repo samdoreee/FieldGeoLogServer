@@ -13,7 +13,7 @@ public class SpotResponseDTO {
     private Long id;
     private Double latitude;
     private Double longitude;
-    private LocalDateTime createDt;
+    private LocalDateTime createDT;
     private String weatherInfo;
     private Integer strike;
     private String rockType;
@@ -25,7 +25,7 @@ public class SpotResponseDTO {
         this.id = spot.getId();
         this.latitude = spot.getLatitude();
         this.longitude = spot.getLongitude();
-        this.createDt = spot.getCreateDT();
+        this.createDT = spot.getCreateDT();
         this.weatherInfo = spot.getWeatherInfo();
         this.strike = spot.getStrike();
         this.rockType = spot.getRockType();
