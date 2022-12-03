@@ -57,6 +57,12 @@ class SpotTest {
                     .latitude(100.0 + i)
                     .longitude(100.0)
                     .createDT(LocalDateTime.now())
+                    .weatherInfo("하늘상태: 흐림 / 강수형태: 강수 없음")
+                    .strike(56)
+                    .rockType("화성암")
+                    .geoStructure("굴곡")
+                    .dip(20)
+                    .direction("NS")
                     .build()));
         }
     }
@@ -65,8 +71,13 @@ class SpotTest {
     @DisplayName("Spot 추가")
     void addSpot() {
         Map<String, Object> requestBody = new HashMap<>() {{
-            put("latitude", 200.0);
-            put("longitude", 200.0);
+            put("latitude", 36.6287);
+            put("longitude", 127.4606);
+            put("strike", 56);
+            put("rockType", "화성암");
+            put("geoStructure", "굴곡");
+            put("dip", 20);
+            put("direction", "NS");
         }};
         LocalDateTime timeBeforeRequest = LocalDateTime.now();
         Spot spot = given()
@@ -78,13 +89,24 @@ class SpotTest {
                         getDocumentResponse(),
                         requestFields(
                                 fieldWithPath("latitude").type(JsonFieldType.NUMBER).description("위도"),
-                                fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도")
+                                fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도"),
+                                fieldWithPath("strike").type(JsonFieldType.NUMBER).description("주향"),
+                                fieldWithPath("geoStructure").type(JsonFieldType.STRING).description("지질구조"),
+                                fieldWithPath("rockType").type(JsonFieldType.STRING).description("암종"),
+                                fieldWithPath("dip").type(JsonFieldType.NUMBER).description("경사"),
+                                fieldWithPath("direction").type(JsonFieldType.STRING).description("방향")
                         ),
                         responseFields(
                                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("id"),
                                 fieldWithPath("latitude").type(JsonFieldType.NUMBER).description("위도"),
                                 fieldWithPath("longitude").type(JsonFieldType.NUMBER).description("경도"),
-                                fieldWithPath("createDT").type(JsonFieldType.STRING).description("기록된 날짜")
+                                fieldWithPath("createDT").type(JsonFieldType.STRING).description("날씨정보"),
+                                fieldWithPath("weatherInfo").type(JsonFieldType.STRING).description("기록된 날짜"),
+                                fieldWithPath("strike").type(JsonFieldType.NUMBER).description("주향"),
+                                fieldWithPath("geoStructure").type(JsonFieldType.STRING).description("지질구조"),
+                                fieldWithPath("rockType").type(JsonFieldType.STRING).description("암종"),
+                                fieldWithPath("dip").type(JsonFieldType.NUMBER).description("경사"),
+                                fieldWithPath("direction").type(JsonFieldType.STRING).description("방향")
                         )
                 )).when().post()
                 .then().statusCode(200)
@@ -110,7 +132,13 @@ class SpotTest {
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("id"),
                                 fieldWithPath("[].latitude").type(JsonFieldType.NUMBER).description("위도"),
                                 fieldWithPath("[].longitude").type(JsonFieldType.NUMBER).description("경도"),
-                                fieldWithPath("[].createDT").type(JsonFieldType.STRING).description("기록된 날짜")
+                                fieldWithPath("[].createDT").type(JsonFieldType.STRING).description("날씨정보"),
+                                fieldWithPath("[].weatherInfo").type(JsonFieldType.STRING).description("기록된 날짜"),
+                                fieldWithPath("[].strike").type(JsonFieldType.NUMBER).description("주향"),
+                                fieldWithPath("[].geoStructure").type(JsonFieldType.STRING).description("지질구조"),
+                                fieldWithPath("[].rockType").type(JsonFieldType.STRING).description("암종"),
+                                fieldWithPath("[].dip").type(JsonFieldType.NUMBER).description("경사"),
+                                fieldWithPath("[].direction").type(JsonFieldType.STRING).description("방향")
                         )
                 )).when().get()
                 .then().statusCode(200)
