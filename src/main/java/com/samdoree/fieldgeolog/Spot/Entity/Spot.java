@@ -65,7 +65,7 @@ public class Spot {
         this.strike = spotRequestDTO.getStrike();
         this.rockType = spotRequestDTO.getRockType();
         this.geoStructure = spotRequestDTO.getGeoStructure();
-        this.dip = spotRequestDTO.getDp();
+        this.dip = spotRequestDTO.getDip();
         this.direction = spotRequestDTO.getDirection();
     }
 
@@ -73,7 +73,7 @@ public class Spot {
         this.strike = spotRequestDTO.getStrike();
         this.rockType = spotRequestDTO.getRockType();
         this.geoStructure = spotRequestDTO.getGeoStructure();
-        this.dip = spotRequestDTO.getDp();
+        this.dip = spotRequestDTO.getDip();
         this.direction = spotRequestDTO.getDirection();
     }
 
@@ -84,8 +84,8 @@ public class Spot {
             this.rockType = spotRequestDTO.getRockType();
         if (spotRequestDTO.getGeoStructure() != null)
             this.geoStructure = spotRequestDTO.getGeoStructure();
-        if (spotRequestDTO.getDp() != null)
-            this.dip = spotRequestDTO.getDp();
+        if (spotRequestDTO.getDip() != null)
+            this.dip = spotRequestDTO.getDip();
         if (spotRequestDTO.getDirection() != null)
             this.direction = spotRequestDTO.getDirection();
     }
