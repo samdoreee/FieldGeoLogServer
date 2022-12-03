@@ -1,8 +1,8 @@
 package com.samdoree.fieldgeolog.Spot.Service;
 
+import com.samdoree.fieldgeolog.Spot.DTO.SpotInsertRequestDTO;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
-import com.samdoree.fieldgeolog.Spot.DTO.SpotRequestDTO;
 import com.samdoree.fieldgeolog.Spot.DTO.SpotResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ public class SpotRegisterService {
     private final SpotRepository spotRepository;
 
     @Transactional
-    public SpotResponseDTO addSpot(SpotRequestDTO spotRequestDTO) throws Exception {
-        Spot spot = spotRepository.save(Spot.createFrom(spotRequestDTO));
+    public SpotResponseDTO addSpot(SpotInsertRequestDTO spotInsertRequestDTO) throws Exception {
+        Spot spot = spotRepository.save(Spot.createFrom(spotInsertRequestDTO));
         return SpotResponseDTO.from(spot);
     }
 }

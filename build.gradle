@@ -1,7 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id 'org.asciidoctor.convert' version '1.5.8'
+	id "org.asciidoctor.jvm.convert" version "3.3.2"
 	id 'java'
 }
 
@@ -19,8 +19,10 @@ repositories {
 	mavenCentral()
 }
 
-ext {
-	set('snippetsDir', file("build/generated-snippets"))
+def restAssuredVersion = '4.1.2'
+
+configurations {
+	asciidoctorExtensions
 }
 
 dependencies {
@@ -32,15 +34,47 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+	// e2e 테스트용 rest-assured 라이브러리
+	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+	testImplementation "io.rest-assured:json-path:${restAssuredVersion}"
+	testImplementation "io.rest-assured:xml-path:${restAssuredVersion}"
+	modules {
+		module("org.codehaus.groovy:groovy") {
+			replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
+		}
+		module("org.codehaus.groovy:groovy-xml") {
+			replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
+		}
+	}
+	// 테스트용 in-memory database
+	runtimeOnly 'com.h2database:h2'
+	// rest docs
+	asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'org.springframework.restdocs:spring-restdocs-restassured'
 }
 
-tasks.named('test') {
-	outputs.dir snippetsDir
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+}
+
+test {
 	useJUnitPlatform()
+	outputs.dir snippetsDir
 }
 
-tasks.named('asciidoctor') {
+asciidoctor {
+	configurations "asciidoctorExtensions"
 	inputs.dir snippetsDir
 	dependsOn test
+}
+
+task copyDocument(type: Copy) {
+	dependsOn asciidoctor
+
+	from file("${asciidoctor.outputDir}/")
+	into file("src/main/resources/static/docs")
+}
+
+bootJar {
+	dependsOn copyDocument
 }

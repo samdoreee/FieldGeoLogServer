@@ -1,9 +1,9 @@
 package com.samdoree.fieldgeolog.Spot.Entity;
 
-import com.samdoree.fieldgeolog.Spot.DTO.SpotRequestDTO;
 import com.samdoree.fieldgeolog.Spot.Service.WeatherApi;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import com.samdoree.fieldgeolog.Spot.DTO.SpotEditRequestDTO;
+import com.samdoree.fieldgeolog.Spot.DTO.SpotInsertRequestDTO;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -12,7 +12,10 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @EntityListeners(AuditingEntityListener.class)
 public class Spot {
 
@@ -20,9 +23,9 @@ public class Spot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double latitude;        // 위도(가로 좌표)
-    private Double longitude;       // 경도(세로 좌표)
-//    private LatXLngY latXLngY;      // 위도, 경도, X, Y
+    //==  1. 자동입력 정보 ===//
+    private Double latitude;     // 위도(가로 좌표)
+    private Double longitude;    // 경도(세로 좌표)
     private Double X;
     private Double Y;
 
@@ -31,18 +34,60 @@ public class Spot {
 
     private String weatherInfo;     // 날씨정보
 
-    public static Spot createFrom(SpotRequestDTO spotRequestDTO) throws Exception {
-        return new Spot(spotRequestDTO);
+    //==  수동 입력 + 필수 정보 ===//
+    private Integer strike;         // 주향
+
+    @Column(name = "rock_type")
+    private String rockType;        // 암종
+
+    @Column(name = "geo_structure")
+    private String geoStructure;    // 지질구조
+    private Integer dip;            // 경사
+    private String direction;
+
+
+    public static Spot createFrom(SpotInsertRequestDTO spotInsertRequestDTO) throws Exception {
+        return new Spot(spotInsertRequestDTO);
     }
 
-    private Spot(SpotRequestDTO spotRequestDTO) throws Exception {
+    public static Spot createFrom(SpotEditRequestDTO spotEditRequestDTO) throws Exception {
+        return new Spot(spotEditRequestDTO);
+    }
+
+    private Spot(SpotInsertRequestDTO spotRequestDTO) throws Exception {
         this.latitude = spotRequestDTO.getLatitude();
         this.longitude = spotRequestDTO.getLongitude();
         this.createDT = LocalDateTime.now();
-        Double[] XY = convertGRID_GPS(latitude,longitude);
+        Double[] XY = convertGRID_GPS(latitude, longitude);
         this.X = XY[0];
         this.Y = XY[1];
         this.weatherInfo = new WeatherApi().restApiGetWeather(createDT, X, Y);
+        this.strike = spotRequestDTO.getStrike();
+        this.rockType = spotRequestDTO.getRockType();
+        this.geoStructure = spotRequestDTO.getGeoStructure();
+        this.dip = spotRequestDTO.getDp();
+        this.direction = spotRequestDTO.getDirection();
+    }
+
+    private Spot(SpotEditRequestDTO spotRequestDTO) throws Exception {
+        this.strike = spotRequestDTO.getStrike();
+        this.rockType = spotRequestDTO.getRockType();
+        this.geoStructure = spotRequestDTO.getGeoStructure();
+        this.dip = spotRequestDTO.getDp();
+        this.direction = spotRequestDTO.getDirection();
+    }
+
+    public void modifySpot(SpotEditRequestDTO spotRequestDTO) throws Exception {
+        if (spotRequestDTO.getDirection() != null)
+            this.strike = spotRequestDTO.getStrike();
+        if (spotRequestDTO.getRockType() != null)
+            this.rockType = spotRequestDTO.getRockType();
+        if (spotRequestDTO.getGeoStructure() != null)
+            this.geoStructure = spotRequestDTO.getGeoStructure();
+        if (spotRequestDTO.getDp() != null)
+            this.dip = spotRequestDTO.getDp();
+        if (spotRequestDTO.getDirection() != null)
+            this.direction = spotRequestDTO.getDirection();
     }
 
     // 위도, 경도 => grid X,Y좌표로 변환하는 모듈 구현
