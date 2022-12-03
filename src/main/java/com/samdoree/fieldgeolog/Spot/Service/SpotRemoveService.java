@@ -16,6 +16,7 @@ public class SpotRemoveService {
     public boolean removeSpot(Long SpotId) {
 
         if (!spotRepository.existsById(SpotId)) {
+            System.out.println("해당하는 spot을 찾을 수 없습니다");
             return false;
         }
 

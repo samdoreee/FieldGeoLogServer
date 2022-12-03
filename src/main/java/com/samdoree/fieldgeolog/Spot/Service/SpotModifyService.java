@@ -1,28 +1,22 @@
 package com.samdoree.fieldgeolog.Spot.Service;
 
+import com.samdoree.fieldgeolog.Spot.DTO.SpotEditRequestDTO;
+import com.samdoree.fieldgeolog.Spot.DTO.SpotResponseDTO;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
-import com.samdoree.fieldgeolog.Spot.DTO.SpotResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SpotSearchService {
+public class SpotModifyService {
 
     private final SpotRepository spotRepository;
 
-    public List<SpotResponseDTO> getAllSpotList() {
-        List<Spot> spots = spotRepository.findAll();
-        return spots.stream().map(SpotResponseDTO::new).collect(Collectors.toList());
-    }
-
-    public SpotResponseDTO getOneSpot(Long spotId) {
+    @Transactional
+    public SpotResponseDTO modifySpot(Long spotId, SpotEditRequestDTO spotEditRequestDTO) throws Exception {
 
         if (!spotRepository.existsById(spotId)) {
             System.out.println("해당하는 spot을 찾을 수 없습니다");
@@ -30,6 +24,7 @@ public class SpotSearchService {
         }
 
         Spot spot = spotRepository.findById(spotId).get();
+        spot.modifySpot(spotEditRequestDTO);
         return SpotResponseDTO.from(spot);
     }
 }
