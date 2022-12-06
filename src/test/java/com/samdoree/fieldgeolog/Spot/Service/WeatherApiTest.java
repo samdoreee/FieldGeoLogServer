@@ -1,6 +1,8 @@
 package com.samdoree.fieldgeolog.Spot.Service;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -9,18 +11,22 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class WeatherApiTest {
+
+    @Autowired
+    private WeatherApi weatherApi;
 
     @Test
     void getWeatherInfo_at_now() throws Exception {
-        String weatherInfo = WeatherApi.getWeatherInfo(LocalDateTime.now(), 36.6287, 127.4606);
+        String weatherInfo = weatherApi.getWeatherInfo(LocalDateTime.now(), 36.6287, 127.4606);
         System.out.println("weatherInfo = " + weatherInfo);
     }
 
     @Test
     void getWeatherInfo_at_today_3AM() throws Exception {
         LocalDateTime testTime = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.of(3, 0));
-        String weatherInfo = WeatherApi.getWeatherInfo(testTime, 36.6287, 127.4606);
+        String weatherInfo = weatherApi.getWeatherInfo(testTime, 36.6287, 127.4606);
         System.out.println("weatherInfo = " + weatherInfo);
     }
 

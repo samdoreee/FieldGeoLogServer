@@ -46,19 +46,19 @@ public class Spot {
     private String direction;
 
 
-    public static Spot createFrom(SpotInsertRequestDTO spotInsertRequestDTO) throws Exception {
-        return new Spot(spotInsertRequestDTO);
+    public static Spot createFrom(SpotInsertRequestDTO spotInsertRequestDTO, WeatherApi weatherApi) throws Exception {
+        return new Spot(spotInsertRequestDTO,weatherApi);
     }
 
     public static Spot createFrom(SpotEditRequestDTO spotEditRequestDTO) throws Exception {
         return new Spot(spotEditRequestDTO);
     }
 
-    private Spot(SpotInsertRequestDTO spotRequestDTO) throws Exception {
+    private Spot(SpotInsertRequestDTO spotRequestDTO, WeatherApi weatherApi) throws Exception {
         this.latitude = spotRequestDTO.getLatitude();
         this.longitude = spotRequestDTO.getLongitude();
         this.createDT = LocalDateTime.now();
-        this.weatherInfo = WeatherApi.getWeatherInfo(createDT, latitude, longitude);
+        this.weatherInfo = weatherApi.getWeatherInfo(createDT, latitude, longitude);
         this.strike = spotRequestDTO.getStrike();
         this.rockType = spotRequestDTO.getRockType();
         this.geoStructure = spotRequestDTO.getGeoStructure();

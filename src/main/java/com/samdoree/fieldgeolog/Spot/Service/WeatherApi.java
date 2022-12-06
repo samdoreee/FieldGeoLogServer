@@ -1,7 +1,12 @@
 package com.samdoree.fieldgeolog.Spot.Service;
 
+import com.samdoree.fieldgeolog.config.WeatherApiKey;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,7 +18,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+@Component
+@RequiredArgsConstructor
 public class WeatherApi {
+
+    private final WeatherApiKey weatherApiKey;
 
     // 기상청의 단기예보 API가 제공되는 시간 중에서 가장 최근 시간대를 반환해주는 함수
     public static LocalDateTime getRecentAvailableTime(LocalDateTime localDateTime) {
@@ -32,9 +41,10 @@ public class WeatherApi {
         return LocalDateTime.of(localDate, localTime);
     }
 
-    public static String getWeatherInfo(LocalDateTime curLocalDateTime, Double latitude, Double longitude) throws Exception {
+    public String getWeatherInfo(LocalDateTime curLocalDateTime, Double latitude, Double longitude) throws Exception {
         String apiURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";   // 단수예보 조회
-        String authKey = ""; // 본인 서비스 키 입력
+        String authKey = weatherApiKey.getKey(); // 본인 서비스 키 입력
+        System.out.println("authKey = " + authKey);
 
         curLocalDateTime = getRecentAvailableTime(curLocalDateTime);
         String baseDate = curLocalDateTime.format(DateTimeFormatter.BASIC_ISO_DATE);
@@ -188,6 +198,6 @@ public class WeatherApi {
 
         double X = Math.floor(ra * Math.sin(theta) + XO + 0.5);
         double Y = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
-        return new Double[]{X , Y};
+        return new Double[]{X, Y};
     }
 }
