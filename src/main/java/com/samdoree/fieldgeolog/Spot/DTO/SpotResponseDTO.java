@@ -18,7 +18,7 @@ public class SpotResponseDTO {
     private Integer strike;
     private String rockType;
     private String geoStructure;
-    private Integer dp;
+    private Integer dip;
     private String direction;
 
     public SpotResponseDTO(Spot spot) {
@@ -30,7 +30,7 @@ public class SpotResponseDTO {
         this.strike = spot.getStrike();
         this.rockType = spot.getRockType();
         this.geoStructure = spot.getGeoStructure();
-        this.dp = spot.getDip();
+        this.dip = spot.getDip();
         this.direction = spot.getDirection();
     }
 

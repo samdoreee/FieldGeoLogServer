@@ -14,10 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class SpotRegisterService {
 
     private final SpotRepository spotRepository;
+    private final WeatherApi weatherApi;
 
     @Transactional
     public SpotResponseDTO addSpot(SpotInsertRequestDTO spotInsertRequestDTO) throws Exception {
-        Spot spot = spotRepository.save(Spot.createFrom(spotInsertRequestDTO));
+        Spot spot = spotRepository.save(Spot.createFrom(spotInsertRequestDTO, weatherApi));
         return SpotResponseDTO.from(spot);
     }
 }

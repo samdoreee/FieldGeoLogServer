@@ -24,7 +24,7 @@ public class SpotInsertRequestDTO {
     private String geoStructure;
 
     @NotNull
-    private Integer dp;
+    private Integer dip;
 
     @NotNull
     private String direction;

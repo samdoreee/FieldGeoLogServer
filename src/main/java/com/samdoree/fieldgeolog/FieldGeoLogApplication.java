@@ -11,5 +11,4 @@ public class FieldGeoLogApplication {
     public static void main(String[] args) {
         SpringApplication.run(FieldGeoLogApplication.class, args);
     }
-
 }
