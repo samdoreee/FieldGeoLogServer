@@ -8,21 +8,41 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class WeatherApi {
 
-    public static String getWeatherInfo(LocalDateTime createDT, Double X, Double Y) throws Exception {
+    // 기상청의 단기예보 API가 제공되는 시간 중에서 가장 최근 시간대를 반환해주는 함수
+    public static LocalDateTime getRecentAvailableTime(LocalDateTime localDateTime) {
+        LocalDate localDate = localDateTime.toLocalDate();
+        LocalTime localTime = localDateTime.toLocalTime();
+        if (localTime.isBefore(LocalTime.of(2, 10))) {
+            localTime = LocalTime.of(23, 0);
+            localDate = localDate.minusDays(1);
+        } else {
+            // API 제공 시간은 다음과 같다
+            // 2:10, 5:10, 8:10, 11:10, 14:10, 17:10, 20:10, 23:10
+            int hour = localTime.minusMinutes(10).getHour();
+            hour = (hour - 2) / 3 * 3 + 2;
+            localTime = LocalTime.of(hour, 0);
+        }
+        return LocalDateTime.of(localDate, localTime);
+    }
 
-        // 변수 설정
+    public static String getWeatherInfo(LocalDateTime curLocalDateTime, Double latitude, Double longitude) throws Exception {
         String apiURL = "http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst";   // 단수예보 조회
         String authKey = ""; // 본인 서비스 키 입력
 
-        String baseDate = createDT.format(DateTimeFormatter.BASIC_ISO_DATE);
-        String baseTime = createDT.format(DateTimeFormatter.ofPattern("hhmm"));
-        System.out.println("시간: "+baseTime);
+        curLocalDateTime = getRecentAvailableTime(curLocalDateTime);
+        String baseDate = curLocalDateTime.format(DateTimeFormatter.BASIC_ISO_DATE);
+        String baseTime = curLocalDateTime.format(DateTimeFormatter.ofPattern("kkmm"));
+        System.out.println("시간: " + baseTime);
         String dataType = "JSON";
+
+        Double[] XY = getGridGpsOf(latitude, longitude);
 
         StringBuilder urlBuilder = new StringBuilder(apiURL);
         urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + authKey);
@@ -31,8 +51,8 @@ public class WeatherApi {
         urlBuilder.append("&" + URLEncoder.encode("dataType", "UTF-8") + "=" + URLEncoder.encode(dataType, "UTF-8")); // 받으려는 타입
         urlBuilder.append("&" + URLEncoder.encode("base_date", "UTF-8") + "=" + URLEncoder.encode(baseDate, "UTF-8")); /* 조회하고싶은 날짜*/
         urlBuilder.append("&" + URLEncoder.encode("base_time", "UTF-8") + "=" + URLEncoder.encode(baseTime, "UTF-8")); /* 조회하고싶은 시간 AM 02시부터 3시간 단위 */
-        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(Y.intValue()), "UTF-8")); //경도
-        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(X.intValue()), "UTF-8")); //위도
+        urlBuilder.append("&" + URLEncoder.encode("nx", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(XY[0].intValue()), "UTF-8")); //경도
+        urlBuilder.append("&" + URLEncoder.encode("ny", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(XY[1].intValue()), "UTF-8")); //위도
 
         URL url = new URL(urlBuilder.toString());
         System.out.println(url);
@@ -57,10 +77,7 @@ public class WeatherApi {
         rd.close();
         conn.disconnect();
         String result = sb.toString();
-
         System.out.println(result);
-
-
         JSONObject jsonObject = new JSONObject(result);
         JSONObject parse_response = (JSONObject) jsonObject.get("response");
         JSONObject parse_body = (JSONObject) parse_response.get("body"); // response 로 부터 body 찾아오기
@@ -134,10 +151,7 @@ public class WeatherApi {
         return weatherInfo;
     }
 
-
-
-    // 위도, 경도 => grid X,Y좌표로 변환하는 모듈 구현
-    public static Double[] convertGRID_GPS(double latitude, double longitude) {
+    public static Double[] getGridGpsOf(Double latitude, Double longitude) {
         double RE = 6371.00877; // 지구 반경(km)
         double GRID = 5.0;      // 격자 간격(km)
         double SLAT1 = 30.0;    // 투영 위도1(degree)
@@ -172,11 +186,8 @@ public class WeatherApi {
         if (theta < -Math.PI) theta += 2.0 * Math.PI;
         theta *= sn;
 
-        Double X = Math.floor(ra * Math.sin(theta) + XO + 0.5);
-        Double Y = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
-        Double[] XY = new Double[2];
-        XY[0] = X;
-        XY[1] = Y;
-        return XY;
+        double X = Math.floor(ra * Math.sin(theta) + XO + 0.5);
+        double Y = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
+        return new Double[]{X , Y};
     }
 }
