@@ -14,7 +14,9 @@ public class FileResponseDTO {
     private String fileName;
     private String filePath;
 
-    public FileResponseDTO(File file){
-        copyProperties(file, this);
+    public FileResponseDTO(File file) {
+        this.id = file.getId();
+        this.fileName = file.getFileName();
+        this.filePath = file.getFilePath();
     }
 }
