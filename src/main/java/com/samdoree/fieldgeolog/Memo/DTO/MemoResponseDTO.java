@@ -23,6 +23,7 @@ public class MemoResponseDTO {
     }
 
     private MemoResponseDTO(Memo memo) {
+        this.id = memo.getId();
         this.description = memo.getDescription();
         if (memo.getFileList() != null && !memo.getFileList().isEmpty()) {
             this.fileList = memo.getFileList().stream().map(FileResponseDTO::new).collect(Collectors.toList());
