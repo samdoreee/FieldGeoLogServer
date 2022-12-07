@@ -20,9 +20,7 @@ public class MemoRegisterService {
 
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
-
-    @Value("${fieldgeolog.fileDir}")
-    private String fileDir;
+    private final String fileDir = "src/main/resources/files/";
 
     @Transactional
     public MemoResponseDTO addMemo(Long spotId, MemoRequestDTO memoRequestDTO, MultipartFile[] multipartFiles) throws Exception {

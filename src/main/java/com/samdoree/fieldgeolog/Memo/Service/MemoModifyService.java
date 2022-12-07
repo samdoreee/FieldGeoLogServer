@@ -10,7 +10,6 @@ import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -20,9 +19,7 @@ public class MemoModifyService {
 
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
-
-    @Value("${fieldgeolog.fileDir}")
-    private String fileDir;
+    private final String fileDir = "src/main/resources/files/";
 
     @Transactional
     public MemoResponseDTO modifyMemo(Long spotId, Long memoId, MemoRequestDTO memoRequestDTO, MultipartFile[] multipartFiles) {

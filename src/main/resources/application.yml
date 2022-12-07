@@ -33,6 +33,3 @@ logging:
     org:
       springframework:
         web: DEBUG
-
-fieldgeolog:
-  fileDir: src/main/resources/files/

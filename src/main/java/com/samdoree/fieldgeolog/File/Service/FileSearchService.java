@@ -3,7 +3,6 @@ package com.samdoree.fieldgeolog.File.Service;
 import com.samdoree.fieldgeolog.File.Entity.File;
 import com.samdoree.fieldgeolog.File.Repository.FileRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,8 +20,7 @@ import java.util.Optional;
 public class FileSearchService {
 
     private final FileRepository fileRepository;
-    @Value("${fieldgeolog.fileDir}")
-    private String fileDir;
+    private final String fileDir = "src/main/resources/files/";
 
     public ResponseEntity<InputStreamResource> downloadFile(Long spotId, Long memoId, String filePath) throws FileNotFoundException, Exception {
 
