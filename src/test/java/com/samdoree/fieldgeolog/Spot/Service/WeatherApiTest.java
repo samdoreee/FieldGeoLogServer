@@ -24,13 +24,6 @@ class WeatherApiTest {
     }
 
     @Test
-    void getWeatherInfo_at_today_3AM() throws Exception {
-        LocalDateTime testTime = LocalDateTime.of(LocalDateTime.now().toLocalDate(), LocalTime.of(3, 0));
-        String weatherInfo = weatherApi.getWeatherInfo(testTime, 36.6287, 127.4606);
-        System.out.println("weatherInfo = " + weatherInfo);
-    }
-
-    @Test
     void normalize() {
         List<Integer> availableHours = Arrays.asList(2, 5, 8, 11, 14, 17, 20, 23);
 
