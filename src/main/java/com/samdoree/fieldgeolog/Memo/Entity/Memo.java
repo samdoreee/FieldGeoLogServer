@@ -3,9 +3,7 @@ package com.samdoree.fieldgeolog.Memo.Entity;
 import com.samdoree.fieldgeolog.Memo.DTO.MemoRequestDTO;
 import com.samdoree.fieldgeolog.File.Entity.File;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +11,10 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Memo {
 
     @Id
@@ -33,14 +34,8 @@ public class Memo {
     public static Memo createFrom(Spot spot, MemoRequestDTO memoRequestDTO) {
         return Memo.builder()
                 .spot(spot)
-                .memoRequestDTO(memoRequestDTO)
+                .description(memoRequestDTO.getDescription())
                 .build();
-    }
-
-    @Builder
-    private Memo(Spot spot, MemoRequestDTO memoRequestDTO) {
-        this.description = memoRequestDTO.getDescription();
-        this.spot = spot;
     }
 
     public void modifyMemo(MemoRequestDTO memoRequestDTO) {
