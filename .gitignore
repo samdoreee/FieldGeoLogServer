@@ -283,3 +283,4 @@ gradle-app.setting
 
 src/main/resources/static/docs
 src/main/resources/application-API-KEY.yml
+src/main/resources/files

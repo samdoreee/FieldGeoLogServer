@@ -35,6 +35,7 @@ public class Memo {
         return Memo.builder()
                 .spot(spot)
                 .description(memoRequestDTO.getDescription())
+                .fileList(new ArrayList<>())
                 .build();
     }
 

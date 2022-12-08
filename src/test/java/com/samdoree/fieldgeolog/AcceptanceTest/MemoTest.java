@@ -1,5 +1,7 @@
 package com.samdoree.fieldgeolog.AcceptanceTest;
 
+import com.samdoree.fieldgeolog.File.Entity.File;
+import com.samdoree.fieldgeolog.File.Repository.FileRepository;
 import com.samdoree.fieldgeolog.Memo.DTO.MemoResponseDTO;
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import com.samdoree.fieldgeolog.Memo.Repository.MemoRepository;
@@ -26,8 +28,8 @@ import static com.samdoree.fieldgeolog.ApiDocumentUtils.getDocumentRequest;
 import static com.samdoree.fieldgeolog.ApiDocumentUtils.getDocumentResponse;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
 
@@ -47,8 +49,12 @@ class MemoTest {
     @Autowired
     private MemoRepository memoRepository;
 
+    @Autowired
+    private FileRepository fileRepository;
+
     private final List<Spot> preGeneratedSpots = new ArrayList<>();
     private final List<Memo> preGeneratedMemos = new ArrayList<>();
+    private final List<File> preGeneratedFiles = new ArrayList<>();
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -57,6 +63,7 @@ class MemoTest {
                 .port(port)
                 .filter(documentationConfiguration(restDocumentation));
 
+        fileRepository.deleteAll();
         memoRepository.deleteAll();
         spotRepository.deleteAll();
         for (int i = 0; i < 2; i++) {
@@ -78,10 +85,17 @@ class MemoTest {
                     .description("description " + i)
                     .build()));
         }
-        preGeneratedMemos.add(memoRepository.save(Memo.builder()
+        memoRepository.save(Memo.builder()
                 .spot(preGeneratedSpots.get(1))
                 .description("description ")
-                .build()));
+                .build());
+        for (int i = 0; i < 2; i++) {
+            preGeneratedFiles.add(fileRepository.save(File.builder()
+                            .fileName("test")
+                    .build())
+            );
+        }
+
     }
 
     @Test
@@ -93,40 +107,66 @@ class MemoTest {
                 .pathParams("spotId", preGeneratedSpots.get(0).getId())
                 .accept("application/json")
                 .multiPart("memo", "{ \"description\": \"test desc\" }", "application/json")
+                .multiPart("file", "image.png", new byte[10])
                 .contentType("multipart/form-data")
                 .filter(document("add-memo",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("spotId").description("spot id")
+                        ),
+                        requestParts(
+                                partWithName("memo").description("description"),
+                                partWithName("file").description("사진들")
+                        ),
                         responseFields(
                                 fieldWithPath("id").type(JsonFieldType.NUMBER).description("id"),
                                 fieldWithPath("description").type(JsonFieldType.STRING).description("메모 내용"),
-                                fieldWithPath("fileList").type(JsonFieldType.ARRAY).description("첨부된 사진들")
+                                fieldWithPath("fileList").type(JsonFieldType.ARRAY).description("첨부된 사진들"),
+                                fieldWithPath("fileList[].id").type(JsonFieldType.NUMBER).description("사진 id"),
+                                fieldWithPath("fileList[].fileName").type(JsonFieldType.STRING).description("사진 fileName"),
+                                fieldWithPath("fileList[].filePath").type(JsonFieldType.STRING).description("사진 filePath")
                         )
                 )).when().post("/{spotId}/memos")
                 .then().log().all().statusCode(200)
                 .extract().response().body().as(MemoResponseDTO.class);
         assertThat(memo.getDescription()).isEqualTo("test desc");
+        assertThat(memo.getFileList().size()).isEqualTo(1);
         assertThat(memoRepository.findAll().size()).isEqualTo(numOfMemoBeforeAddRequest + 1);
     }
 
     @Test
     @DisplayName("특정 Spot의 모든 memo 가져오기")
     void getAllMemoList() {
+        given()
+                .spec(basicRequest).basePath("/api/spots")
+                .pathParams("spotId", preGeneratedSpots.get(0).getId())
+                .accept("application/json")
+                .multiPart("memo", "{ \"description\": \"test desc\" }", "application/json")
+                .multiPart("file", "image.png", new byte[10])
+                .contentType("multipart/form-data").when().post("/{spotId}/memos")
+                .then().log().all().statusCode(200);
         MemoResponseDTO[] memos = given()
                 .spec(basicRequest).basePath("/api/spots")
                 .pathParams("spotId", preGeneratedSpots.get(0).getId())
                 .accept("application/json")
-                .filter(document("add-memo",
+                .filter(document("get-all-memo",
                         getDocumentRequest(),
                         getDocumentResponse(),
+                        pathParameters(
+                                parameterWithName("spotId").description("spot id")
+                        ),
                         responseFields(
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("id"),
                                 fieldWithPath("[].description").type(JsonFieldType.STRING).description("메모 내용"),
-                                fieldWithPath("[].fileList").type(JsonFieldType.ARRAY).description("첨부된 사진들")
+                                fieldWithPath("[].fileList").type(JsonFieldType.ARRAY).description("첨부된 사진들"),
+                                fieldWithPath("[].fileList[].id").type(JsonFieldType.NUMBER).description("사진 id"),
+                                fieldWithPath("[].fileList[].fileName").type(JsonFieldType.STRING).description("사진 fileName"),
+                                fieldWithPath("[].fileList[].filePath").type(JsonFieldType.STRING).description("사진 filePath")
                         )
                 )).when().get("/{spotId}/memos")
                 .then().log().all().statusCode(200)
                 .extract().response().body().as(MemoResponseDTO[].class);
-        assertThat(memos).hasSameElementsAs(memoRepository.findAllBySpotId(preGeneratedSpots.get(0).getId()).stream().map(MemoResponseDTO::from).collect(Collectors.toList()));
+        assertThat(memos.length).isEqualTo(preGeneratedMemos.size() + 1);
     }
 }
