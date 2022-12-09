@@ -18,17 +18,18 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.samdoree.fieldgeolog.ApiDocumentUtils.getDocumentRequest;
 import static com.samdoree.fieldgeolog.ApiDocumentUtils.getDocumentResponse;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured3.RestAssuredRestDocumentation.documentationConfiguration;
@@ -36,6 +37,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(RestDocumentationExtension.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class MemoTest {
 
     @LocalServerPort
@@ -63,9 +65,6 @@ class MemoTest {
                 .port(port)
                 .filter(documentationConfiguration(restDocumentation));
 
-        fileRepository.deleteAll();
-        memoRepository.deleteAll();
-        spotRepository.deleteAll();
         for (int i = 0; i < 2; i++) {
             preGeneratedSpots.add(spotRepository.save(Spot.builder()
                     .latitude(100.0 + i)
@@ -91,7 +90,7 @@ class MemoTest {
                 .build());
         for (int i = 0; i < 2; i++) {
             preGeneratedFiles.add(fileRepository.save(File.builder()
-                            .fileName("test")
+                    .fileName("test")
                     .build())
             );
         }

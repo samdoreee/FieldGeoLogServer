@@ -14,6 +14,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -32,6 +33,7 @@ import static org.springframework.restdocs.restassured3.RestAssuredRestDocumenta
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(RestDocumentationExtension.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class SpotTest {
 
     @LocalServerPort
@@ -51,7 +53,6 @@ class SpotTest {
                 .port(port)
                 .filter(documentationConfiguration(restDocumentation));
 
-        spotRepository.deleteAll();
         for (int i = 0; i < 4; i++) {
             preGeneratedSpots.add(spotRepository.save(Spot.builder()
                     .latitude(100.0 + i)
