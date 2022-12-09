@@ -29,13 +29,12 @@ public class Memo {
     private String description;
 
     @OneToMany(mappedBy = "memo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<File> fileList = new ArrayList<>();
+    @Builder.Default private final List<File> fileList = new ArrayList<>();
 
     public static Memo createFrom(Spot spot, MemoRequestDTO memoRequestDTO) {
         return Memo.builder()
                 .spot(spot)
                 .description(memoRequestDTO.getDescription())
-                .fileList(new ArrayList<>())
                 .build();
     }
 
