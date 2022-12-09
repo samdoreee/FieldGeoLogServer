@@ -45,3 +45,29 @@ include::{snippets}/remove-spot/http-response.adoc[]
 
 {blank} +
 
+=== 특정 Spot에 Memo 추가
+==== Request Path Parameters
+include::{snippets}/add-memo/path-parameters.adoc[]
+==== Request Part
+include::{snippets}/add-memo/request-parts.adoc[]
+==== HTTP 통신 예제
+===== HTTP request
+include::{snippets}/add-memo/http-request.adoc[]
+===== HTTP response
+include::{snippets}/add-memo/http-response.adoc[]
+
+{blank} +
+
+=== 특정 Spot의 모든 Memo 읽어오기
+==== Request Path Parameters
+include::{snippets}/get-all-memo/path-parameters.adoc[]
+==== Response Body Fields
+include::{snippets}/get-all-memo/response-fields.adoc[]
+==== HTTP 통신 예제
+===== HTTP request
+include::{snippets}/get-all-memo/http-request.adoc[]
+===== HTTP response
+include::{snippets}/get-all-memo/http-response.adoc[]
+
+{blank} +
+

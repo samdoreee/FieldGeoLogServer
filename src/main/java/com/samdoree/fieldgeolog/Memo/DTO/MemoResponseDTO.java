@@ -3,6 +3,7 @@ package com.samdoree.fieldgeolog.Memo.DTO;
 import com.samdoree.fieldgeolog.File.DTO.FileResponseDTO;
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public class MemoResponseDTO {
 
     private Long id;
