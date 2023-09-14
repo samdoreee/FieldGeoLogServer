@@ -19,6 +19,7 @@ public class Memo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "memo_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -50,5 +51,9 @@ public class Memo {
 
     public void removeFile() {
         fileList.clear();
+    }
+
+    public void belongToSpot(Spot spot) {
+        this.spot = spot;
     }
 }

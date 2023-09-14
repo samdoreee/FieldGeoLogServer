@@ -4,6 +4,8 @@ import com.samdoree.fieldgeolog.File.Entity.File;
 import com.samdoree.fieldgeolog.Memo.DTO.MemoRequestDTO;
 import com.samdoree.fieldgeolog.Memo.DTO.MemoResponseDTO;
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
+import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
+import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import com.samdoree.fieldgeolog.Memo.Repository.MemoRepository;
 import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
@@ -17,13 +19,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 public class MemoModifyService {
 
+    private final PersonalRecordRepository personalRecordRepository;
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
     private final String fileDir = "src/main/resources/files/";
 
     @Transactional
-    public MemoResponseDTO modifyMemo(Long spotId, Long memoId, MemoRequestDTO memoRequestDTO, MultipartFile[] multipartFiles) {
+    public MemoResponseDTO modifyMemo(Long personalRecordId,Long spotId, Long memoId, MemoRequestDTO memoRequestDTO, MultipartFile[] multipartFiles) {
 
+        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                .orElseThrow(() -> new NullPointerException());
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new NullPointerException());
         Memo memo = memoRepository.findById(memoId)
