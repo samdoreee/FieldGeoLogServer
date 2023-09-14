@@ -4,6 +4,7 @@ import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,6 +15,7 @@ public class SpotResponseDTO {
     private Double latitude;
     private Double longitude;
     private LocalDateTime createDT;
+    private LocalDateTime modifyDT;
     private String weatherInfo;
     private Integer strike;
     private String rockType;
@@ -26,6 +28,7 @@ public class SpotResponseDTO {
         this.latitude = spot.getLatitude();
         this.longitude = spot.getLongitude();
         this.createDT = spot.getCreateDT();
+        this.modifyDT = spot.getModifyDT();
         this.weatherInfo = spot.getWeatherInfo();
         this.strike = spot.getStrike();
         this.rockType = spot.getRockType();

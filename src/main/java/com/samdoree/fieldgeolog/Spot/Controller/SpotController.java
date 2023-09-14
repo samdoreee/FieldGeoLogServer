@@ -14,6 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/personalRecords/{personalRecordId}/spots")
 @RequiredArgsConstructor
 public class SpotController {
 
@@ -22,28 +23,29 @@ public class SpotController {
     private final SpotModifyService spotModifyService;
     private final SpotRemoveService spotRemoveService;
 
-    @PostMapping("/api/spots")
-    public SpotResponseDTO addSpot(@Valid @RequestBody SpotInsertRequestDTO spotInsertRequestDTO) throws Exception {
-        return spotRegisterService.addSpot(spotInsertRequestDTO);
+
+    @PostMapping()
+    public SpotResponseDTO addSpot(@PathVariable Long personalRecordId, @Valid @RequestBody SpotInsertRequestDTO spotInsertRequestDTO) throws Exception {
+        return spotRegisterService.addSpot(personalRecordId, spotInsertRequestDTO);
     }
 
-    @GetMapping("/api/spots")
-    public List<SpotResponseDTO> getAllSpotList() {
-        return spotSearchService.getAllSpotList();
+    @GetMapping()
+    public List<SpotResponseDTO> getAllSpotList(@PathVariable Long personalRecordId) {
+        return spotSearchService.getAllSpotList(personalRecordId);
     }
 
-    @GetMapping("/api/spots/{spotId}")
-    public SpotResponseDTO getOneSpot(@PathVariable Long spotId) {
-        return spotSearchService.getOneSpot(spotId);
+    @GetMapping("/{spotId}")
+    public SpotResponseDTO getOneSpot(@PathVariable Long personalRecordId, @PathVariable Long spotId) {
+        return spotSearchService.getOneSpot(personalRecordId, spotId);
     }
 
-    @PatchMapping("/api/spots/{spotId}")
-    public SpotResponseDTO modifySpot(@PathVariable Long spotId, @Valid @RequestBody SpotEditRequestDTO spotEditRequestDTO) throws Exception {
-        return spotModifyService.modifySpot(spotId, spotEditRequestDTO);
+    @PatchMapping("/{spotId}")
+    public SpotResponseDTO modifySpot(@PathVariable Long personalRecordId, @PathVariable Long spotId, @Valid @RequestBody SpotEditRequestDTO spotEditRequestDTO) throws Exception {
+        return spotModifyService.modifySpot(personalRecordId, spotId, spotEditRequestDTO);
     }
 
-    @DeleteMapping("/api/spots/{spotId}")
-    public Boolean removeSpot(@PathVariable Long spotId) {
-        return spotRemoveService.removeSpot(spotId);
+    @DeleteMapping("/{spotId}")
+    public Boolean removeSpot(@PathVariable Long personalRecordId, @PathVariable Long spotId) {
+        return spotRemoveService.removeSpot(personalRecordId, spotId);
     }
 }

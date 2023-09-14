@@ -1,9 +1,7 @@
-package com.samdoree.fieldgeolog.Spot.Service;
+package com.samdoree.fieldgeolog.PersonalRecord.Service;
 
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
-import com.samdoree.fieldgeolog.Spot.Entity.Spot;
-import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,20 +9,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class SpotRemoveService {
+public class PersonalRecordRemoveService {
 
     private final PersonalRecordRepository personalRecordRepository;
-    private final SpotRepository spotRepository;
 
     @Transactional
-    public boolean removeSpot(Long personalRecordId, Long spotId) {
+    public boolean removePersonalRecord(Long personalRecordId) {
 
         PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
                 .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
 
-        spotRepository.deleteById(spotId);
+        personalRecordRepository.deleteById(personalRecordId);
         return true;
     }
 }

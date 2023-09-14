@@ -2,6 +2,8 @@ package com.samdoree.fieldgeolog.Memo.Service;
 
 import com.samdoree.fieldgeolog.Memo.DTO.MemoResponseDTO;
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
+import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
+import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import com.samdoree.fieldgeolog.Memo.Repository.MemoRepository;
 import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
@@ -17,11 +19,14 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class MemoSearchService {
 
+    private final PersonalRecordRepository personalRecordRepository;
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
 
-    public List<MemoResponseDTO> getAllMemoList(Long spotId) {
+    public List<MemoResponseDTO> getAllMemoList(Long personalRecordId, Long spotId) {
 
+        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                .orElseThrow(() -> new NullPointerException());
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new NullPointerException());
 
@@ -29,7 +34,10 @@ public class MemoSearchService {
         return memoList.stream().map(MemoResponseDTO::from).collect(Collectors.toList());
     }
 
-    public MemoResponseDTO getOneMemo(Long spotId, Long memoId) {
+    public MemoResponseDTO getOneMemo(Long personalRecordId, Long spotId, Long memoId) {
+
+        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                .orElseThrow(() -> new NullPointerException());
 
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new NullPointerException());
