@@ -1,28 +1,32 @@
-package com.samdoree.fieldgeolog.Memo.Service;
+package com.samdoree.fieldgeolog.Picture.Service;
 
-import com.samdoree.fieldgeolog.Memo.DTO.MemoRequestDTO;
-import com.samdoree.fieldgeolog.Memo.DTO.MemoResponseDTO;
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
+import com.samdoree.fieldgeolog.Memo.Repository.MemoRepository;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
+import com.samdoree.fieldgeolog.Picture.DTO.PictureRequestDTO;
+import com.samdoree.fieldgeolog.Picture.DTO.PictureResponseDTO;
+import com.samdoree.fieldgeolog.Picture.Entity.Picture;
+import com.samdoree.fieldgeolog.Picture.Repository.PictureRepository;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
-import com.samdoree.fieldgeolog.Memo.Repository.MemoRepository;
 import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemoModifyService {
+public class PictureRegisterService {
 
     private final PersonalRecordRepository personalRecordRepository;
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
+    private final PictureRepository pictureRepository;
 
     @Transactional
-    public MemoResponseDTO modifyMemo(Long personalRecordId, Long spotId, Long memoId, MemoRequestDTO memoRequestDTO) {
+    public PictureResponseDTO addPicture(Long personalRecordId, Long spotId, Long memoId, PictureRequestDTO pictureRequestDTO) throws Exception {
 
         PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
                 .orElseThrow(() -> new NullPointerException());
@@ -31,8 +35,7 @@ public class MemoModifyService {
         Memo memo = memoRepository.findById(memoId)
                 .orElseThrow(() -> new NullPointerException());
 
-        memo.modifyMemo(memoRequestDTO);
-        return MemoResponseDTO.from(memo);
+        Picture picture = pictureRepository.save(Picture.createFrom(memo, pictureRequestDTO));
+        return PictureResponseDTO.from(picture);
     }
-
 }

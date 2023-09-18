@@ -1,7 +1,7 @@
 package com.samdoree.fieldgeolog.Memo.Entity;
 
 import com.samdoree.fieldgeolog.Memo.DTO.MemoRequestDTO;
-import com.samdoree.fieldgeolog.File.Entity.File;
+import com.samdoree.fieldgeolog.Picture.Entity.Picture;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import lombok.*;
 
@@ -26,11 +26,11 @@ public class Memo {
     @JoinColumn(name = "spot_id")
     private Spot spot;
 
+    @OneToMany(mappedBy = "memo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Picture> pictureList = new ArrayList<>();
+
     @Column(columnDefinition = "TEXT")
     private String description;
-
-    @OneToMany(mappedBy = "memo", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default private final List<File> fileList = new ArrayList<>();
 
     public static Memo createFrom(Spot spot, MemoRequestDTO memoRequestDTO) {
         return Memo.builder()
@@ -44,13 +44,13 @@ public class Memo {
     }
 
     //== 연관관계 메서드 ==//
-    public void addFile(File file) {
-        fileList.add(file);
-        file.belongToMemo(this);
+    public void addPicture(Picture picture) {
+        pictureList.add(picture);
+        picture.belongToMemo(this);
     }
 
-    public void removeFile() {
-        fileList.clear();
+    public void removePicture() {
+        pictureList.clear();
     }
 
     public void belongToSpot(Spot spot) {
