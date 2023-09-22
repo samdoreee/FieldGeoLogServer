@@ -1,11 +1,9 @@
 package com.samdoree.fieldgeolog.PersonalRecord.Entity;
 
+import com.samdoree.fieldgeolog.Article.Entity.Article;
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRequestDTO;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -28,7 +26,10 @@ public class PersonalRecord {
     @OneToMany(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Spot> spotList = new ArrayList<>();
 
-    @Column(name = "record_title")  //50글자로 fix
+    @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.REMOVE)
+    private Article article;
+
+    @Column(name = "record_title")
     private String recordTitle;
 
     @CreatedDate
@@ -45,7 +46,6 @@ public class PersonalRecord {
         this.recordTitle = personalRequestDTO.getRecordTitle();
         this.createDT = LocalDateTime.now();
         this.modifyDT = LocalDateTime.now();
-        System.out.print(this.createDT);
     }
 
     public void modifyPersonalRecord(PersonalRequestDTO personalRequestDTO) {

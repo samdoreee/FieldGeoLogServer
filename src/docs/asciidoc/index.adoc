@@ -12,36 +12,36 @@
 
 === Spot 추가
 ==== Request Body Fields
-include::{snippets}/add-spot/request-fields.adoc[]
+include::{snippets}/add-comment/request-fields.adoc[]
 ==== Response Body Fields
-include::{snippets}/add-spot/response-fields.adoc[]
+include::{snippets}/add-comment/response-fields.adoc[]
 ==== HTTP 통신 예제
 ===== HTTP request
-include::{snippets}/add-spot/http-request.adoc[]
+include::{snippets}/add-comment/http-request.adoc[]
 ===== HTTP response
-include::{snippets}/add-spot/http-response.adoc[]
+include::{snippets}/add-comment/http-response.adoc[]
 
 {blank} +
 
 === 모든 Spot 읽어오기
 ==== Response Body Fields
-include::{snippets}/read-all-spot/response-fields.adoc[]
+include::{snippets}/read-all-comment/response-fields.adoc[]
 ==== HTTP 통신 예제
 ===== HTTP request
-include::{snippets}/read-all-spot/http-request.adoc[]
+include::{snippets}/read-all-comment/http-request.adoc[]
 ===== HTTP response
-include::{snippets}/read-all-spot/http-response.adoc[]
+include::{snippets}/read-all-comment/http-response.adoc[]
 
 {blank} +
 
 === 특정 Spot 삭제하기
 ==== Request Path Parameters
-include::{snippets}/remove-spot/path-parameters.adoc[]
+include::{snippets}/remove-comment/path-parameters.adoc[]
 ==== HTTP 통신 예제
 ===== HTTP request
-include::{snippets}/remove-spot/http-request.adoc[]
+include::{snippets}/remove-comment/http-request.adoc[]
 ===== HTTP response
-include::{snippets}/remove-spot/http-response.adoc[]
+include::{snippets}/remove-comment/http-response.adoc[]
 
 {blank} +
 
