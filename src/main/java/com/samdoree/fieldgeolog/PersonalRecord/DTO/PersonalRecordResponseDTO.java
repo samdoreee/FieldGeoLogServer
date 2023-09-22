@@ -1,13 +1,18 @@
 package com.samdoree.fieldgeolog.PersonalRecord.DTO;
 
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
+import com.samdoree.fieldgeolog.Spot.DTO.SpotResponseDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PersonalRecordResponseDTO {
 
@@ -15,6 +20,7 @@ public class PersonalRecordResponseDTO {
     private String recordTitle;
     private LocalDateTime createDT;
     private LocalDateTime modifyDT;
+    private List<SpotResponseDTO> spotResponseDTOList;
 
 
     public PersonalRecordResponseDTO(PersonalRecord personalRecord) {
@@ -22,6 +28,7 @@ public class PersonalRecordResponseDTO {
         this.recordTitle = personalRecord.getRecordTitle();
         this.createDT = personalRecord.getCreateDT();
         this.modifyDT = personalRecord.getModifyDT();
+        this.spotResponseDTOList = personalRecord.getSpotList().stream().map(SpotResponseDTO::new).collect(Collectors.toList());
     }
 
     public static PersonalRecordResponseDTO from(PersonalRecord personalRecord) {
