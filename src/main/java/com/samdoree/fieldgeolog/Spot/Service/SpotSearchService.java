@@ -24,20 +24,26 @@ public class SpotSearchService {
     public List<SpotResponseDTO> getAllSpotList(Long personalRecordId) {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
-        List<Spot> spots = spotRepository.findAllByPersonalRecordId(personalRecordId);
-        return spots.stream().map(SpotResponseDTO::new).collect(Collectors.toList());
+        List<Spot> validSpotList = spotRepository.findAllByPersonalRecordId(personalRecordId)
+                .stream()
+                .filter(spot -> spot.isValid())
+                .collect(Collectors.toList());
+
+        return validSpotList.stream()
+                .map(SpotResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     public SpotResponseDTO getOneSpot(Long personalRecordId, Long spotId) {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
         Spot validSpot = spotRepository.findById(spotId)
-                .filter(spot -> spot.getIsValid())
+                .filter(spot -> spot.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
         return SpotResponseDTO.from(validSpot);

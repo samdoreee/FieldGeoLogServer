@@ -24,10 +24,10 @@ public class SpotModifyService {
     public SpotResponseDTO modifySpot(Long personalRecordId, Long spotId, SpotEditRequestDTO spotEditRequestDTO) throws Exception {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
         Spot validSpot = spotRepository.findById(spotId)
-                .filter(spot -> spot.getIsValid())
+                .filter(spot -> spot.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
         validSpot.modifySpot(spotEditRequestDTO);

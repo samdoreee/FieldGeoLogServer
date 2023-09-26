@@ -6,6 +6,7 @@ import com.samdoree.fieldgeolog.Spot.Service.WeatherApi;
 import lombok.*;
 import com.samdoree.fieldgeolog.Spot.DTO.SpotEditRequestDTO;
 import com.samdoree.fieldgeolog.Spot.DTO.SpotInsertRequestDTO;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -35,7 +36,7 @@ public class Spot {
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Memo> memoList = new ArrayList<>();
 
-    private Boolean isValid = true;
+    private Boolean isValid;
 
     //==  1. 자동입력 정보 ===//
     private Double latitude;     // 위도(가로 좌표)
@@ -81,6 +82,7 @@ public class Spot {
         this.geoStructure = spotRequestDTO.getGeoStructure();
         this.dip = spotRequestDTO.getDip();
         this.direction = spotRequestDTO.getDirection();
+        this.isValid = true;
     }
 
     private Spot(SpotEditRequestDTO spotRequestDTO) {
@@ -108,6 +110,10 @@ public class Spot {
     //== 유효성 필드 메서드 ==//
     public void markAsInvalid() {
         this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//
