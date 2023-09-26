@@ -24,7 +24,8 @@ public class SpotRemoveService {
         Spot spot = spotRepository.findById(spotId)
                 .orElseThrow(() -> new NullPointerException());
 
-        spotRepository.deleteById(spotId);
+        spot.markAsInvalid();
+        spotRepository.save(spot);
         return true;
     }
 }

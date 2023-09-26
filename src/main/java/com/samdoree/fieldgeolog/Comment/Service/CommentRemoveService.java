@@ -24,7 +24,8 @@ public class CommentRemoveService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NullPointerException());
 
-        commentRepository.deleteById(commentId);
+        comment.markAsInvalid();
+        commentRepository.save(comment);
         return true;
     }
 }

@@ -19,7 +19,8 @@ public class ArticleRemoveService {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new NullPointerException());
 
-        articleRepository.deleteById(articleId);
+        article.markAsInvalid();
+        articleRepository.save(article);
         return true;
     }
 }

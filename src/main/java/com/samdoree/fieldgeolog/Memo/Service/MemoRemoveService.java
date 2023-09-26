@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemoRemoveService {
 
     private final PersonalRecordRepository personalRecordRepository;
-
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
 
@@ -30,7 +29,8 @@ public class MemoRemoveService {
         Memo memo = memoRepository.findById(memoId)
                 .orElseThrow(() -> new NullPointerException());
 
-        memoRepository.deleteById(memoId);
+        memo.markAsInvalid();
+        memoRepository.save(memo);
         return true;
     }
 }

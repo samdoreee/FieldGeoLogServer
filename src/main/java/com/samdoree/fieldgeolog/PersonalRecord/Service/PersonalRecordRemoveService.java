@@ -19,7 +19,8 @@ public class PersonalRecordRemoveService {
         PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
                 .orElseThrow(() -> new NullPointerException());
 
-        personalRecordRepository.deleteById(personalRecordId);
+        personalRecord.markAsInvalid();
+        personalRecordRepository.save(personalRecord);
         return true;
     }
 }
