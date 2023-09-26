@@ -27,13 +27,13 @@ public class MemoModifyService {
     public MemoResponseDTO modifyMemo(Long personalRecordId, Long spotId, Long memoId, MemoRequestDTO memoRequestDTO) {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
         Spot validSpot = spotRepository.findById(spotId)
-                .filter(spot -> spot.getIsValid())
+                .filter(spot -> spot.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
         Memo validMemo = memoRepository.findById(memoId)
-                .filter(memo -> memo.getIsValid())
+                .filter(memo -> memo.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
 
         validMemo.modifyMemo(memoRequestDTO);

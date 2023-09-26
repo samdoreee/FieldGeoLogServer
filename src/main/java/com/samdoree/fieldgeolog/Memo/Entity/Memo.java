@@ -4,6 +4,7 @@ import com.samdoree.fieldgeolog.Memo.DTO.MemoRequestDTO;
 import com.samdoree.fieldgeolog.Picture.Entity.Picture;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,12 +33,13 @@ public class Memo {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Boolean isValid = true;
+    private Boolean isValid;
 
     public static Memo createFrom(Spot spot, MemoRequestDTO memoRequestDTO) {
         return Memo.builder()
                 .spot(spot)
                 .description(memoRequestDTO.getDescription())
+                .isValid(true)
                 .build();
     }
 
@@ -48,6 +50,10 @@ public class Memo {
     //== 유효성 필드 메서드 ==//
     public void markAsInvalid() {
         this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//
