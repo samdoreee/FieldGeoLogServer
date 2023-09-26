@@ -1,7 +1,7 @@
 package com.samdoree.fieldgeolog.PersonalRecord.Entity;
 
 import com.samdoree.fieldgeolog.Article.Entity.Article;
-import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRequestDTO;
+import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -38,18 +38,18 @@ public class PersonalRecord {
     @CreatedDate
     private LocalDateTime modifyDT;
 
-    public static PersonalRecord createFrom(PersonalRequestDTO personalRequestDTO) {
-        return new PersonalRecord(personalRequestDTO);
+    public static PersonalRecord createFrom(PersonalRecordRequestDTO personalRecordRequestDTO) {
+        return new PersonalRecord(personalRecordRequestDTO);
     }
 
-    public PersonalRecord(PersonalRequestDTO personalRequestDTO) {
-        this.recordTitle = personalRequestDTO.getRecordTitle();
+    public PersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
+        this.recordTitle = personalRecordRequestDTO.getRecordTitle();
         this.createDT = LocalDateTime.now();
         this.modifyDT = LocalDateTime.now();
     }
 
-    public void modifyPersonalRecord(PersonalRequestDTO personalRequestDTO) {
-        this.recordTitle = personalRequestDTO.getRecordTitle();
+    public void modifyPersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
+        this.recordTitle = personalRecordRequestDTO.getRecordTitle();
         this.modifyDT = LocalDateTime.now();
     }
 

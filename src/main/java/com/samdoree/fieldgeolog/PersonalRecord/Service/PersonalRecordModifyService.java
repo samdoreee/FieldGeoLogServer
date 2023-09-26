@@ -4,7 +4,7 @@ import com.samdoree.fieldgeolog.Article.Entity.Article;
 import com.samdoree.fieldgeolog.Article.Repository.ArticleRepository;
 import com.samdoree.fieldgeolog.Article.Service.ArticleRemoveService;
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordResponseDTO;
-import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRequestDTO;
+import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class PersonalRecordModifyService {
     private final ArticleRepository articleRepository;
 
     @Transactional
-    public PersonalRecordResponseDTO modifyPersonalRecord(Long personalRecordId, PersonalRequestDTO personalRequestDTO) throws Exception {
+    public PersonalRecordResponseDTO modifyPersonalRecord(Long personalRecordId, PersonalRecordRequestDTO personalRecordRequestDTO) throws Exception {
 
         PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
                 .orElseThrow(() -> new NullPointerException());
@@ -32,7 +32,7 @@ public class PersonalRecordModifyService {
         Long articleId = article.getId();
         articleRemoveService.removeArticle(articleId);
 
-        personalRecord.modifyPersonalRecord(personalRequestDTO);
+        personalRecord.modifyPersonalRecord(personalRecordRequestDTO);
         return PersonalRecordResponseDTO.from(personalRecord);
     }
 }

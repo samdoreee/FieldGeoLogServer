@@ -1,7 +1,7 @@
 package com.samdoree.fieldgeolog.PersonalRecord.Controller;
 
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordResponseDTO;
-import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRequestDTO;
+import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
 import com.samdoree.fieldgeolog.PersonalRecord.Service.PersonalRecordModifyService;
 import com.samdoree.fieldgeolog.PersonalRecord.Service.PersonalRecordRegisterService;
 import com.samdoree.fieldgeolog.PersonalRecord.Service.PersonalRecordRemoveService;
@@ -21,10 +21,9 @@ public class PersonalRecordController {
     private final PersonalRecordModifyService personalRecordModifyService;
     private final PersonalRecordRemoveService personalRecordRemoveService;
 
-
     @PostMapping("/api/personalRecords")
-    public PersonalRecordResponseDTO addPersonalRecord(@Valid @RequestBody PersonalRequestDTO personalRequestDTO) throws Exception {
-        return personalRecordRegisterService.addPersonalRecord(personalRequestDTO);
+    public PersonalRecordResponseDTO addPersonalRecord(@Valid @RequestBody PersonalRecordRequestDTO personalRecordRequestDTO) throws Exception {
+        return personalRecordRegisterService.addPersonalRecord(personalRecordRequestDTO);
     }
 
     @GetMapping("/api/personalRecords")
@@ -46,8 +45,8 @@ public class PersonalRecordController {
     }
 
     @PatchMapping("/api/personalRecords/{personalRecordId}")
-    public PersonalRecordResponseDTO modifyPersonalRecord(@PathVariable Long personalRecordId, @Valid @RequestBody PersonalRequestDTO personalRequestDTO) throws Exception {
-        return personalRecordModifyService.modifyPersonalRecord(personalRecordId, personalRequestDTO);
+    public PersonalRecordResponseDTO modifyPersonalRecord(@PathVariable Long personalRecordId, @Valid @RequestBody PersonalRecordRequestDTO personalRecordRequestDTO) throws Exception {
+        return personalRecordModifyService.modifyPersonalRecord(personalRecordId, personalRecordRequestDTO);
     }
 
     @DeleteMapping("/api/personalRecords/{personalRecordId}")
