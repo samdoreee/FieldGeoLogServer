@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -21,10 +23,11 @@ public class CommentRegisterService {
     @Transactional
     public CommentResponseDTO addComment(Long articleId, CommentRequestDTO commentRequestDTO) throws Exception {
 
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new NullPointerException());
+        Article validArticle = articleRepository.findById(articleId)
+                .filter(article -> article.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Article not found or is not valid."));
 
-        Comment comment = commentRepository.save(Comment.createFrom(article, commentRequestDTO));
+        Comment comment = commentRepository.save(Comment.createFrom(validArticle, commentRequestDTO));
         return CommentResponseDTO.from(comment);
     }
 }
