@@ -30,6 +30,8 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
+    private String title;
+
     @CreatedDate
     private LocalDateTime createDT;
 
@@ -39,6 +41,7 @@ public class Article {
 
     public Article(ArticleRequestDTO articleRequestDTO, PersonalRecord personalRecord) {
         this.personalRecord = personalRecord;
+        this.title = personalRecord.getRecordTitle();
         this.createDT = LocalDateTime.now();
     }
 
@@ -51,6 +54,5 @@ public class Article {
     public void removeComment() {
         commentList.clear();
     }
-
 
 }

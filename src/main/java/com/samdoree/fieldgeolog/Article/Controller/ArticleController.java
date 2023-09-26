@@ -37,6 +37,24 @@ public class ArticleController {
         }
     }
 
+    @GetMapping("/api/articles/search")
+    public List<ArticleResponseDTO> searchArticles(
+            @RequestParam("searchType") String searchType,
+            @RequestParam("keyword") String keyword) {
+
+        List<ArticleResponseDTO> searchResults;
+
+        if ("title".equals(searchType)) {   // 제목 기반 검색
+            searchResults = articleSearchService.searchByTitle(keyword);
+//        } else if ("nickname".equals(searchType)) { // 닉네임 기반 검색
+//            searchResults = articleSearchService.searchByNickname(keyword);
+        } else {
+            searchResults = articleSearchService.emptySearchResult();
+        }
+
+        return searchResults;
+    }
+
     @GetMapping("/api/articles/{articleId}")
     public ArticleResponseDTO getOneArticle(@PathVariable Long articleId) {
         return articleSearchService.getOneArticle(articleId);

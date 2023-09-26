@@ -1,7 +1,7 @@
 package com.samdoree.fieldgeolog.PersonalRecord.Controller;
 
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordResponseDTO;
-import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRequestDTO;
+import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
 import com.samdoree.fieldgeolog.PersonalRecord.Service.PersonalRecordModifyService;
 import com.samdoree.fieldgeolog.PersonalRecord.Service.PersonalRecordRegisterService;
 import com.samdoree.fieldgeolog.PersonalRecord.Service.PersonalRecordRemoveService;
@@ -21,10 +21,9 @@ public class PersonalRecordController {
     private final PersonalRecordModifyService personalRecordModifyService;
     private final PersonalRecordRemoveService personalRecordRemoveService;
 
-
     @PostMapping("/api/personalRecords")
-    public PersonalRecordResponseDTO addPersonalRecord(@Valid @RequestBody PersonalRequestDTO personalRequestDTO) throws Exception {
-        return personalRecordRegisterService.addPersonalRecord(personalRequestDTO);
+    public PersonalRecordResponseDTO addPersonalRecord(@Valid @RequestBody PersonalRecordRequestDTO personalRecordRequestDTO) throws Exception {
+        return personalRecordRegisterService.addPersonalRecord(personalRecordRequestDTO);
     }
 
     @GetMapping("/api/personalRecords")
@@ -40,14 +39,34 @@ public class PersonalRecordController {
         }
     }
 
+    @GetMapping("/api/personalRecords/search")
+    public List<PersonalRecordResponseDTO> searchPersonalRecords(
+            @RequestParam("searchType") String searchType,
+            @RequestParam("keyword") String keyword) {
+
+        List<PersonalRecordResponseDTO> searchResults;
+
+        // 검색 유형(searchType)에 따라 검색 수행
+        if ("title".equals(searchType)) {   // 제목 기반 검색
+            searchResults = personalRecordSearchService.searchByTitle(keyword);
+//        } else if ("nickname".equals(searchType)) { // 닉네임 기반 검색
+//            searchResults = personalRecordSearchService.searchByNickname(keyword);
+        } else {
+            // 검색 유형이 잘못된 경우 기본적으로 빈 목록을 반환하거나 에러 처리 수행하기
+            searchResults = personalRecordSearchService.emptySearchResult();
+        }
+
+        return searchResults;
+    }
+
     @GetMapping("/api/personalRecords/{personalRecordId}")
     public PersonalRecordResponseDTO getOnePersonalRecord(@PathVariable Long personalRecordId) {
         return personalRecordSearchService.getOnePersonalRecord(personalRecordId);
     }
 
     @PatchMapping("/api/personalRecords/{personalRecordId}")
-    public PersonalRecordResponseDTO modifyPersonalRecord(@PathVariable Long personalRecordId, @Valid @RequestBody PersonalRequestDTO personalRequestDTO) throws Exception {
-        return personalRecordModifyService.modifyPersonalRecord(personalRecordId, personalRequestDTO);
+    public PersonalRecordResponseDTO modifyPersonalRecord(@PathVariable Long personalRecordId, @Valid @RequestBody PersonalRecordRequestDTO personalRecordRequestDTO) throws Exception {
+        return personalRecordModifyService.modifyPersonalRecord(personalRecordId, personalRecordRequestDTO);
     }
 
     @DeleteMapping("/api/personalRecords/{personalRecordId}")

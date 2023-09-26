@@ -16,13 +16,16 @@ public class ArticleResponseDTO {
 
     private Long id;
     private PersonalRecordResponseDTO personalRecordResponseDTO;
+    private String title;
     private LocalDateTime createDT;
 
     public ArticleResponseDTO(Article article, PersonalRecordResponseDTO personalRecordResponseDTO) {
         this.id = article.getId();
         this.personalRecordResponseDTO = personalRecordResponseDTO;
+        this.title = personalRecordResponseDTO.getRecordTitle();
         this.createDT = article.getCreateDT();
     }
+
     public static ArticleResponseDTO fromPersonalRecord(Article article, PersonalRecordResponseDTO personalRecordResponseDTO) {
         return new ArticleResponseDTO(article, personalRecordResponseDTO);
     }
