@@ -24,7 +24,7 @@ public class PersonalRecordSearchService {
 
         List<PersonalRecord> validPersonalRecordList = personalRecordRepository.findAll()
                 .stream()
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
 
         return validPersonalRecordList.stream()
@@ -36,7 +36,7 @@ public class PersonalRecordSearchService {
 
         List<PersonalRecord> validPersonalRecordList = personalRecordRepository.findAll(Sort.by(Sort.Direction.ASC, "createDT"))
                 .stream()
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
 
         return validPersonalRecordList.stream()
@@ -48,7 +48,7 @@ public class PersonalRecordSearchService {
 
         List<PersonalRecord> validPersonalRecordList = personalRecordRepository.findAll(Sort.by(Sort.Direction.DESC, "createDT"))
                 .stream()
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
 
         return validPersonalRecordList.stream()
@@ -61,7 +61,7 @@ public class PersonalRecordSearchService {
 
         List<PersonalRecord> validPersonalRecordList = personalRecordRepository.findByRecordTitleContaining(keyword)
                 .stream()
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
 
         return validPersonalRecordList.stream()
@@ -91,7 +91,7 @@ public class PersonalRecordSearchService {
     public PersonalRecordResponseDTO getOnePersonalRecord(Long personalRecordId) {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
         return PersonalRecordResponseDTO.from(validPersonalRecord);

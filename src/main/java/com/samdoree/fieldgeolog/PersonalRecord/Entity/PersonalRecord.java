@@ -4,6 +4,7 @@ import com.samdoree.fieldgeolog.Article.Entity.Article;
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -29,8 +30,7 @@ public class PersonalRecord {
     @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.REMOVE)
     private Article article;
 
-    // 유효성 나타내는 필드
-    private Boolean isValid = true;
+    private Boolean isValid;
 
     @Column(name = "record_title")
     private String recordTitle;
@@ -49,6 +49,7 @@ public class PersonalRecord {
         this.recordTitle = personalRecordRequestDTO.getRecordTitle();
         this.createDT = LocalDateTime.now();
         this.modifyDT = LocalDateTime.now();
+        this.isValid = true;
     }
 
     public void modifyPersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
@@ -59,6 +60,10 @@ public class PersonalRecord {
     //== 유효성 필드 메서드 ==//
     public void markAsInvalid() {
         this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//
