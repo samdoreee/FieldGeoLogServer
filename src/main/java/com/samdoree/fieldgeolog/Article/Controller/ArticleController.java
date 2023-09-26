@@ -26,8 +26,15 @@ public class ArticleController {
     }
 
     @GetMapping("/api/articles")
-    public List<ArticleResponseDTO> getAllArticleList() {
-        return articleSearchService.getAllArticleList();
+    public List<ArticleResponseDTO> getAllArticleList(@RequestParam(name = "sortBy", required = false) String sortBy) {
+        if ("asc".equalsIgnoreCase(sortBy)) {   // api/articles?sortBy=asc
+            return articleSearchService.sortAllArticleOrderByASC();
+        } else if ("desc".equalsIgnoreCase(sortBy)) {   // api/articles?sortBy=desc
+            return articleSearchService.sortAllArticleOrderByDESC();
+        } else {
+            // 기본 동작: 정렬되지 않은 목록 반환
+            return articleSearchService.getAllArticleList();
+        }
     }
 
     @GetMapping("/api/articles/{articleId}")

@@ -14,6 +14,7 @@ import com.samdoree.fieldgeolog.Picture.Service.PictureSearchService;
 import com.samdoree.fieldgeolog.Spot.DTO.SpotResponseDTO;
 import com.samdoree.fieldgeolog.Spot.Service.SpotSearchService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,6 +47,33 @@ public class ArticleSearchService {
                 .collect(Collectors.toList());
     }
 
+    public List<ArticleResponseDTO> sortAllArticleOrderByASC() {
+
+        List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.ASC, "createDT"));
+
+        return articleList.stream()
+                .map(article -> {
+                    Long personalRecordId = article.getPersonalRecord().getId();
+                    PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                            .orElse(null); // PersonalRecord가 없는 경우에 대한 예외 처리 필요
+                    return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<ArticleResponseDTO> sortAllArticleOrderByDESC() {
+
+        List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "createDT"));
+
+        return articleList.stream()
+                .map(article -> {
+                    Long personalRecordId = article.getPersonalRecord().getId();
+                    PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                            .orElse(null); // PersonalRecord가 없는 경우에 대한 예외 처리 필요
+                    return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
+                })
+                .collect(Collectors.toList());
+    }
 
     public ArticleResponseDTO getOneArticle(Long articleId) {
 

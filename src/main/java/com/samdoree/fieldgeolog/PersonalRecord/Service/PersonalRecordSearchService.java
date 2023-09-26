@@ -4,6 +4,7 @@ import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordResponseDTO;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,19 @@ public class PersonalRecordSearchService {
         List<PersonalRecord> personalRecordList = personalRecordRepository.findAll();
         return personalRecordList.stream().map(PersonalRecordResponseDTO::new).collect(Collectors.toList());
     }
+
+    public List<PersonalRecordResponseDTO> sortAllPersonalRecordOrderByASC() {
+
+        List<PersonalRecord> personalRecordList = personalRecordRepository.findAll(Sort.by(Sort.Direction.ASC, "createDT"));
+        return personalRecordList.stream().map(PersonalRecordResponseDTO::new).collect(Collectors.toList());
+    }
+
+    public List<PersonalRecordResponseDTO> sortAllPersonalRecordOrderByDESC() {
+
+        List<PersonalRecord> personalRecordList = personalRecordRepository.findAll(Sort.by(Sort.Direction.DESC, "createDT"));
+        return personalRecordList.stream().map(PersonalRecordResponseDTO::new).collect(Collectors.toList());
+    }
+
 
     public PersonalRecordResponseDTO getOnePersonalRecord(Long personalRecordId) {
 
