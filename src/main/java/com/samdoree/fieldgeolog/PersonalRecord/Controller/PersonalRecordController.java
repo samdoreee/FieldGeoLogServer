@@ -28,8 +28,16 @@ public class PersonalRecordController {
     }
 
     @GetMapping("/api/personalRecords")
-    public List<PersonalRecordResponseDTO> getAllPersonalRecordList() {
-        return personalRecordSearchService.getAllPersonalRecordList();
+    public List<PersonalRecordResponseDTO> getAllPersonalRecordList(@RequestParam(name = "sortBy", required = false) String sortBy) {
+
+        if ("asc".equalsIgnoreCase(sortBy)) {   // api/personalRecords?sortBy=asc
+            return personalRecordSearchService.sortAllPersonalRecordOrderByASC();
+        } else if ("desc".equalsIgnoreCase(sortBy)) {   // api/personalRecords?sortBy=desc
+            return personalRecordSearchService.sortAllPersonalRecordOrderByDESC();
+        } else {
+            // 기본 동작: 정렬되지 않은 목록 반환
+            return personalRecordSearchService.getAllPersonalRecordList();
+        }
     }
 
     @GetMapping("/api/personalRecords/{personalRecordId}")
