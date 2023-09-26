@@ -31,32 +31,38 @@ public class PictureSearchService {
     public List<PictureResponseDTO> getAllPictureList(Long personalRecordId, Long spotId, Long memoId) {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
         Spot validSpot = spotRepository.findById(spotId)
-                .filter(spot -> spot.getIsValid())
+                .filter(spot -> spot.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
         Memo validMemo = memoRepository.findById(memoId)
-                .filter(memo -> memo.getIsValid())
+                .filter(memo -> memo.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
 
-        List<Picture> pictures = pictureRepository.findAllByMemoId(memoId);
-        return pictures.stream().map(PictureResponseDTO::new).collect(Collectors.toList());
+        List<Picture> validPictureList = pictureRepository.findAllByMemoId(memoId)
+                .stream()
+                .filter(picture -> picture.isValid())
+                .collect(Collectors.toList());
+
+        return validPictureList.stream()
+                .map(PictureResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     public PictureResponseDTO getOnePicture(Long personalRecordId, Long spotId, Long memoId, Long pictureId) {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.getIsValid())
+                .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
         Spot validSpot = spotRepository.findById(spotId)
-                .filter(spot -> spot.getIsValid())
+                .filter(spot -> spot.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
         Memo validMemo = memoRepository.findById(memoId)
-                .filter(memo -> memo.getIsValid())
+                .filter(memo -> memo.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
         Picture validPicture = pictureRepository.findById(pictureId)
-                .filter(picture -> picture.getIsValid())
+                .filter(picture -> picture.isValid())
                 .orElseThrow(() -> new NoSuchElementException("Picture not found or is not valid."));
 
         return PictureResponseDTO.from(validPicture);

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 
 @Service
 @RequiredArgsConstructor
@@ -26,17 +28,21 @@ public class PictureRemoveService {
     @Transactional
     public boolean removePicture(Long personalRecordId, Long spotId, Long memoId, Long pictureId) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
-        Memo memo = memoRepository.findById(memoId)
-                .orElseThrow(() -> new NullPointerException());
-        Picture picture = pictureRepository.findById(pictureId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
+        Memo validMemo = memoRepository.findById(memoId)
+                .filter(memo -> memo.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
+        Picture validPicture = pictureRepository.findById(pictureId)
+                .filter(picture -> picture.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Picture not found or is not valid."));
 
-        picture.markAsInvalid();
-        pictureRepository.save(picture);
+        validPicture.markAsInvalid();
+        pictureRepository.save(validPicture);
         return true;
     }
 }
