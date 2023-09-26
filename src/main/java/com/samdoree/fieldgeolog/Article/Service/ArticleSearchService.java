@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +74,26 @@ public class ArticleSearchService {
                     return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
                 })
                 .collect(Collectors.toList());
+    }
+
+    // 제목 기반 검색
+    public List<ArticleResponseDTO> searchByTitle(String keyword) {
+
+        List<Article> articleList = articleRepository.findByTitleContaining(keyword);
+        return articleList.stream()
+                .map(article -> {
+                    Long personalRecordId = article.getPersonalRecord().getId();
+                    PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                            .orElse(null);
+                    return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
+                })
+                .collect(Collectors.toList());
+    }
+
+    // 검색 유형이 잘못된 경우 빈 목록을 반환하는 메서드
+    public List<ArticleResponseDTO> emptySearchResult(){
+        // 빈 목록을 반환한다.
+        return Collections.emptyList();
     }
 
     public ArticleResponseDTO getOneArticle(Long articleId) {
