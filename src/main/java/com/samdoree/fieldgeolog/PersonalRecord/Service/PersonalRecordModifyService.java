@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,16 +25,16 @@ public class PersonalRecordModifyService {
     @Transactional
     public PersonalRecordResponseDTO modifyPersonalRecord(Long personalRecordId, PersonalRecordRequestDTO personalRecordRequestDTO) throws Exception {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
-        // 관련 article 자동 삭제
-        // 삭제할 article Id 구하기 => 삭제할 personalRecordId를 FK로 가지고 있는 article을 찾아 걔의 id를 찾아야하는데...
+        // 해당 PersonalRecord와 1:1 관계를 맺고 있는 Article 자동 삭제
         Article article = articleRepository.findByPersonalRecordId(personalRecordId);
         Long articleId = article.getId();
         articleRemoveService.removeArticle(articleId);
 
-        personalRecord.modifyPersonalRecord(personalRecordRequestDTO);
-        return PersonalRecordResponseDTO.from(personalRecord);
+        validPersonalRecord.modifyPersonalRecord(personalRecordRequestDTO);
+        return PersonalRecordResponseDTO.from(validPersonalRecord);
     }
 }
