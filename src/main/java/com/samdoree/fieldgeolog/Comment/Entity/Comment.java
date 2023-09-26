@@ -61,9 +61,6 @@ public class Comment {
         this.isValid = false;
     }
 
-    public boolean isValid() {
-        return isValid;
-    }
 
     //== 연관관계 메서드 ==//
     public void belongToArticle(Article article) {

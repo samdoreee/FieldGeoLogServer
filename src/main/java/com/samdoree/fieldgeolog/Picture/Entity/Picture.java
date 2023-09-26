@@ -49,10 +49,6 @@ public class Picture {
         this.isValid = false;
     }
 
-    public boolean isValid() {
-        return isValid;
-    }
-
     //== 연관관계 메서드 ==//
     public void belongToMemo(Memo memo) {
         this.memo = memo;

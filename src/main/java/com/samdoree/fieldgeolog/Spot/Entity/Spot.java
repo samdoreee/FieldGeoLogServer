@@ -110,10 +110,6 @@ public class Spot {
         this.isValid = false;
     }
 
-    public boolean isValid() {
-        return isValid;
-    }
-
     //== 연관관계 메서드 ==//
     public void addMemo(Memo memo) {
         memoList.add(memo);
