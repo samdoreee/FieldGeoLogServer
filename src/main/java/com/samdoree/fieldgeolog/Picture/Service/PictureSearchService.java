@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 
@@ -29,12 +30,15 @@ public class PictureSearchService {
 
     public List<PictureResponseDTO> getAllPictureList(Long personalRecordId, Long spotId, Long memoId) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
-        Memo memo = memoRepository.findById(memoId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
+        Memo validMemo = memoRepository.findById(memoId)
+                .filter(memo -> memo.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
 
         List<Picture> pictures = pictureRepository.findAllByMemoId(memoId);
         return pictures.stream().map(PictureResponseDTO::new).collect(Collectors.toList());
@@ -42,15 +46,19 @@ public class PictureSearchService {
 
     public PictureResponseDTO getOnePicture(Long personalRecordId, Long spotId, Long memoId, Long pictureId) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
-        Memo memo = memoRepository.findById(memoId)
-                .orElseThrow(() -> new NullPointerException());
-        Picture picture = pictureRepository.findById(pictureId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
+        Memo validMemo = memoRepository.findById(memoId)
+                .filter(memo -> memo.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
+        Picture validPicture = pictureRepository.findById(pictureId)
+                .filter(picture -> picture.getIsValid())
+                .orElseThrow(() -> new NoSuchElementException("Picture not found or is not valid."));
 
-        return PictureResponseDTO.from(picture);
+        return PictureResponseDTO.from(validPicture);
     }
 }
