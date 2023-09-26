@@ -35,6 +35,7 @@ public class Spot {
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Memo> memoList = new ArrayList<>();
 
+    private Boolean isValid = true;
 
     //==  1. 자동입력 정보 ===//
     private Double latitude;     // 위도(가로 좌표)
@@ -102,6 +103,15 @@ public class Spot {
             this.dip = spotRequestDTO.getDip();
         if (spotRequestDTO.getDirection() != null)
             this.direction = spotRequestDTO.getDirection();
+    }
+
+    //== 유효성 필드 메서드 ==//
+    public void markAsInvalid() {
+        this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//

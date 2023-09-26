@@ -32,6 +32,9 @@ public class Memo {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    private Boolean isValid = true;
+
+
     public static Memo createFrom(Spot spot, MemoRequestDTO memoRequestDTO) {
         return Memo.builder()
                 .spot(spot)
@@ -41,6 +44,15 @@ public class Memo {
 
     public void modifyMemo(MemoRequestDTO memoRequestDTO) {
         this.description = memoRequestDTO.getDescription();
+    }
+
+    //== 유효성 필드 메서드 ==//
+    public void markAsInvalid() {
+        this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//

@@ -37,6 +37,7 @@ public class Comment {
     @CreatedDate
     private LocalDateTime modifyDT;
 
+    private Boolean isValid = true;
 
     public static Comment createFrom(Article article, CommentRequestDTO commentRequestDTO) throws Exception {
         return new Comment(article, commentRequestDTO);
@@ -53,6 +54,15 @@ public class Comment {
     public void modifyComment(CommentRequestDTO commentRequestDTO) {
         this.modifyDT = LocalDateTime.now();
         this.content = commentRequestDTO.getContent();
+    }
+
+    //== 유효성 필드 메서드 ==//
+    public void markAsInvalid() {
+        this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//

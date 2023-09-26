@@ -35,6 +35,8 @@ public class Article {
     @CreatedDate
     private LocalDateTime createDT;
 
+    private Boolean isValid = true;
+
     public static Article createFrom(ArticleRequestDTO articleRequestDTO, PersonalRecord personalRecord) {
         return new Article(articleRequestDTO, personalRecord);
     }
@@ -43,6 +45,15 @@ public class Article {
         this.personalRecord = personalRecord;
         this.title = personalRecord.getRecordTitle();
         this.createDT = LocalDateTime.now();
+    }
+
+    //== 유효성 필드 메서드 ==//
+    public void markAsInvalid() {
+        this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//

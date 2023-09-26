@@ -29,6 +29,9 @@ public class PersonalRecord {
     @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.REMOVE)
     private Article article;
 
+    // 유효성 나타내는 필드
+    private Boolean isValid = true;
+
     @Column(name = "record_title")
     private String recordTitle;
 
@@ -51,6 +54,15 @@ public class PersonalRecord {
     public void modifyPersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
         this.recordTitle = personalRecordRequestDTO.getRecordTitle();
         this.modifyDT = LocalDateTime.now();
+    }
+
+    //== 유효성 필드 메서드 ==//
+    public void markAsInvalid() {
+        this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//

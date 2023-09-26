@@ -32,10 +32,18 @@ public class PictureRemoveService {
                 .orElseThrow(() -> new NullPointerException());
         Memo memo = memoRepository.findById(memoId)
                 .orElseThrow(() -> new NullPointerException());
-        Picture picture = pictureRepository.findById(pictureId)
+        Picture existingPicture = pictureRepository.findById(pictureId)
                 .orElseThrow(() -> new NullPointerException());
 
-        pictureRepository.deleteById(pictureId);
+        // Picture 객체의 isValid 값을 false로 설정
+        Picture updatedPicture = Picture.builder()
+                .isValid(false)  //변경할 값을 설정
+                .build();
+
+        // 이미 존재하는 객체를 변경된 객체로 대체
+        existingPicture = updatedPicture;
+
+//        pictureRepository.deleteById(pictureId);
         return true;
     }
 }
