@@ -39,6 +39,26 @@ public class PersonalRecordController {
         }
     }
 
+    @GetMapping("/api/personalRecords/search")
+    public List<PersonalRecordResponseDTO> searchPersonalRecords(
+            @RequestParam("searchType") String searchType,
+            @RequestParam("keyword") String keyword) {
+
+        List<PersonalRecordResponseDTO> searchResults;
+
+        // 검색 유형(searchType)에 따라 검색 수행
+        if ("title".equals(searchType)) {   // 제목 기반 검색
+            searchResults = personalRecordSearchService.searchByTitle(keyword);
+//        } else if ("nickname".equals(searchType)) { // 닉네임 기반 검색
+//            searchResults = personalRecordSearchService.searchByNickname(keyword);
+        } else {
+            // 검색 유형이 잘못된 경우 기본적으로 빈 목록을 반환하거나 에러 처리 수행하기
+            searchResults = personalRecordSearchService.emptySearchResult();
+        }
+
+        return searchResults;
+    }
+
     @GetMapping("/api/personalRecords/{personalRecordId}")
     public PersonalRecordResponseDTO getOnePersonalRecord(@PathVariable Long personalRecordId) {
         return personalRecordSearchService.getOnePersonalRecord(personalRecordId);
