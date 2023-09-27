@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,12 +21,15 @@ public class CommentRemoveService {
     @Transactional
     public boolean removeComment(Long articleId, Long commentId) {
 
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new NullPointerException());
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new NullPointerException());
+        Article validArticle = articleRepository.findById(articleId)
+                .filter(article -> article.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Article not found or is not valid."));
+        Comment validComment = commentRepository.findById(commentId)
+                .filter(comment -> comment.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Comment not found or is not valid."));
 
-        commentRepository.deleteById(commentId);
+        validComment.markAsInvalid();
+        commentRepository.save(validComment);
         return true;
     }
 }

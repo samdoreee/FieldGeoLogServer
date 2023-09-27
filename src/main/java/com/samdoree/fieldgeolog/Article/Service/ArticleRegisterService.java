@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,7 +29,7 @@ public class ArticleRegisterService {
 
         Long personalRecordId = articleRequestDTO.getRecordId();
         PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
         Article article = articleRepository.save(Article.createFrom(articleRequestDTO, personalRecord));
         PersonalRecordResponseDTO personalRecordResponseDTO = personalRecordSearchService.getOnePersonalRecord(personalRecordId);

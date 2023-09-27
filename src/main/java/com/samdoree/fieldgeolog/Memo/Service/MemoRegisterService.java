@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,12 +26,14 @@ public class MemoRegisterService {
     @Transactional
     public MemoResponseDTO addMemo(Long personalRecordId, Long spotId, MemoRequestDTO memoRequestDTO) throws Exception {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
-        Memo memo = Memo.createFrom(spot, memoRequestDTO);
+        Memo memo = Memo.createFrom(validSpot, memoRequestDTO);
         return MemoResponseDTO.from(memoRepository.save(memo));
     }
 }

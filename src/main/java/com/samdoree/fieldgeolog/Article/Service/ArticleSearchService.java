@@ -18,9 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,13 +34,17 @@ public class ArticleSearchService {
     private final PictureSearchService pictureSearchService;
 
     public List<ArticleResponseDTO> getAllArticleList() {
-        List<Article> articleList = articleRepository.findAll();
 
-        return articleList.stream()
+        List<Article> validArticleList = articleRepository.findAll()
+                .stream()
+                .filter(article -> article.isValid())
+                .collect(Collectors.toList());
+
+        return validArticleList.stream()
                 .map(article -> {
                     Long personalRecordId = article.getPersonalRecord().getId();
                     PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                            .orElse(null); // PersonalRecord가 없는 경우에 대한 예외 처리 필요
+                            .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
                     return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
                 })
                 .collect(Collectors.toList());
@@ -50,13 +52,16 @@ public class ArticleSearchService {
 
     public List<ArticleResponseDTO> sortAllArticleOrderByASC() {
 
-        List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.ASC, "createDT"));
+        List<Article> validArticleList = articleRepository.findAll(Sort.by(Sort.Direction.ASC, "createDT"))
+                .stream()
+                .filter(article -> article.isValid())
+                .collect(Collectors.toList());
 
-        return articleList.stream()
+        return validArticleList.stream()
                 .map(article -> {
                     Long personalRecordId = article.getPersonalRecord().getId();
                     PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                            .orElse(null); // PersonalRecord가 없는 경우에 대한 예외 처리 필요
+                            .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
                     return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
                 })
                 .collect(Collectors.toList());
@@ -64,13 +69,16 @@ public class ArticleSearchService {
 
     public List<ArticleResponseDTO> sortAllArticleOrderByDESC() {
 
-        List<Article> articleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "createDT"));
+        List<Article> validArticleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "createDT"))
+                .stream()
+                .filter(article -> article.isValid())
+                .collect(Collectors.toList());
 
-        return articleList.stream()
+        return validArticleList.stream()
                 .map(article -> {
                     Long personalRecordId = article.getPersonalRecord().getId();
                     PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                            .orElse(null); // PersonalRecord가 없는 경우에 대한 예외 처리 필요
+                            .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
                     return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
                 })
                 .collect(Collectors.toList());
@@ -79,29 +87,34 @@ public class ArticleSearchService {
     // 제목 기반 검색
     public List<ArticleResponseDTO> searchByTitle(String keyword) {
 
-        List<Article> articleList = articleRepository.findByTitleContaining(keyword);
-        return articleList.stream()
+        List<Article> validArticleList = articleRepository.findByTitleContaining(keyword)
+                .stream()
+                .filter(article -> article.isValid())
+                .collect(Collectors.toList());
+
+        return validArticleList.stream()
                 .map(article -> {
                     Long personalRecordId = article.getPersonalRecord().getId();
                     PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                            .orElse(null);
+                            .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
                     return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
                 })
                 .collect(Collectors.toList());
     }
 
     // 검색 유형이 잘못된 경우 빈 목록을 반환하는 메서드
-    public List<ArticleResponseDTO> emptySearchResult(){
+    public List<ArticleResponseDTO> emptySearchResult() {
         // 빈 목록을 반환한다.
         return Collections.emptyList();
     }
 
     public ArticleResponseDTO getOneArticle(Long articleId) {
 
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new NullPointerException());
+        Article validArticle = articleRepository.findById(articleId)
+                .filter(article -> article.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Article not found or is not valid."));
 
-        Long personalRecordId = article.getPersonalRecord().getId();
+        Long personalRecordId = validArticle.getPersonalRecord().getId();
         PersonalRecordResponseDTO personalRecordResponseDTO = personalRecordSearchService.getOnePersonalRecord(personalRecordId);
 
         // PersonalRecord -> Spot
@@ -133,7 +146,7 @@ public class ArticleSearchService {
         }
         personalRecordResponseDTO.setSpotResponseDTOList(updatedSpotResponseDTOList);
 
-        return ArticleResponseDTO.fromPersonalRecord(article, personalRecordResponseDTO);
+        return ArticleResponseDTO.fromPersonalRecord(validArticle, personalRecordResponseDTO);
     }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,24 +26,35 @@ public class MemoSearchService {
 
     public List<MemoResponseDTO> getAllMemoList(Long personalRecordId, Long spotId) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
-        List<Memo> memoList = memoRepository.findAllBySpotId(spotId);
-        return memoList.stream().map(MemoResponseDTO::from).collect(Collectors.toList());
+        List<Memo> validMemoList = memoRepository.findAllBySpotId(spotId)
+                .stream()
+                .filter(memo -> memo.isValid())
+                .collect(Collectors.toList());
+
+        return validMemoList.stream()
+                .map(MemoResponseDTO::from)
+                .collect(Collectors.toList());
     }
 
     public MemoResponseDTO getOneMemo(Long personalRecordId, Long spotId, Long memoId) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
+        Memo validMemo = memoRepository.findById(memoId)
+                .filter(memo -> memo.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
 
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
-
-        Memo memo = memoRepository.findById(memoId).get();
-        return MemoResponseDTO.from(memo);
+        return MemoResponseDTO.from(validMemo);
     }
 }

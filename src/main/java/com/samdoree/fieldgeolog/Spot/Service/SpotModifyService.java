@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -21,12 +23,14 @@ public class SpotModifyService {
     @Transactional
     public SpotResponseDTO modifySpot(Long personalRecordId, Long spotId, SpotEditRequestDTO spotEditRequestDTO) throws Exception {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
-        spot.modifySpot(spotEditRequestDTO);
-        return SpotResponseDTO.from(spot);
+        validSpot.modifySpot(spotEditRequestDTO);
+        return SpotResponseDTO.from(validSpot);
     }
 }

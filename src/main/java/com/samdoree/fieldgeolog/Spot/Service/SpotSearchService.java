@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,20 +23,29 @@ public class SpotSearchService {
 
     public List<SpotResponseDTO> getAllSpotList(Long personalRecordId) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
-        List<Spot> spots = spotRepository.findAllByPersonalRecordId(personalRecordId);
-        return spots.stream().map(SpotResponseDTO::new).collect(Collectors.toList());
+        List<Spot> validSpotList = spotRepository.findAllByPersonalRecordId(personalRecordId)
+                .stream()
+                .filter(spot -> spot.isValid())
+                .collect(Collectors.toList());
+
+        return validSpotList.stream()
+                .map(SpotResponseDTO::new)
+                .collect(Collectors.toList());
     }
 
     public SpotResponseDTO getOneSpot(Long personalRecordId, Long spotId) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
-        return SpotResponseDTO.from(spot);
+        return SpotResponseDTO.from(validSpot);
     }
 }

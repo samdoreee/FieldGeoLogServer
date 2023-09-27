@@ -3,6 +3,7 @@ package com.samdoree.fieldgeolog.Comment.Entity;
 import com.samdoree.fieldgeolog.Article.Entity.Article;
 import com.samdoree.fieldgeolog.Comment.DTO.CommentRequestDTO;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -37,6 +38,7 @@ public class Comment {
     @CreatedDate
     private LocalDateTime modifyDT;
 
+    private Boolean isValid;
 
     public static Comment createFrom(Article article, CommentRequestDTO commentRequestDTO) throws Exception {
         return new Comment(article, commentRequestDTO);
@@ -48,11 +50,21 @@ public class Comment {
         this.content = commentRequestDTO.getContent();
         this.createDT = LocalDateTime.now();
         this.modifyDT = LocalDateTime.now();
+        this.isValid = true;
     }
 
     public void modifyComment(CommentRequestDTO commentRequestDTO) {
         this.modifyDT = LocalDateTime.now();
         this.content = commentRequestDTO.getContent();
+    }
+
+    //== 유효성 필드 메서드 ==//
+    public void markAsInvalid() {
+        this.isValid = false;
+    }
+
+    public boolean isValid() {
+        return isValid;
     }
 
     //== 연관관계 메서드 ==//

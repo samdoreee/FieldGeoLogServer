@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -24,15 +26,18 @@ public class MemoModifyService {
     @Transactional
     public MemoResponseDTO modifyMemo(Long personalRecordId, Long spotId, Long memoId, MemoRequestDTO memoRequestDTO) {
 
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NullPointerException());
-        Spot spot = spotRepository.findById(spotId)
-                .orElseThrow(() -> new NullPointerException());
-        Memo memo = memoRepository.findById(memoId)
-                .orElseThrow(() -> new NullPointerException());
+        PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
+                .filter(personalRecord -> personalRecord.isValid())
+                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+        Spot validSpot = spotRepository.findById(spotId)
+                .filter(spot -> spot.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
+        Memo validMemo = memoRepository.findById(memoId)
+                .filter(memo -> memo.isValid())
+                .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
 
-        memo.modifyMemo(memoRequestDTO);
-        return MemoResponseDTO.from(memo);
+        validMemo.modifyMemo(memoRequestDTO);
+        return MemoResponseDTO.from(validMemo);
     }
 
 }
