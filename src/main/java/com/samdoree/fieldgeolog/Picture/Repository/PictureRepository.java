@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface PictureRepository extends JpaRepository<Picture, Long> {
     List<Picture> findAllByMemoId(Long memoId);
+    Boolean existsByMemoId(Long memoId);
+
 }

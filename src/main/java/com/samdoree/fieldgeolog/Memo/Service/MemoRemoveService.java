@@ -40,14 +40,16 @@ public class MemoRemoveService {
                 .orElseThrow(() -> new NoSuchElementException("Memo not found or is not valid."));
 
         // Memo와 1:N 연관관계를 맺는 Picture 객체의 isValid 속성을 모두 false로 설정
-        List<Picture> pictureList = pictureRepository.findAllByMemoId(memoId)
-                .stream()
-                .filter(picture -> picture.isValid())
-                .collect(Collectors.toList());
+        if (pictureRepository.existsByMemoId(memoId)) {
+            List<Picture> pictureList = pictureRepository.findAllByMemoId(memoId)
+                    .stream()
+                    .filter(picture -> picture.isValid())
+                    .collect(Collectors.toList());
 
-        for (Picture picture : pictureList) {
-            picture.markAsInvalid();
-            pictureRepository.save(picture);
+            for (Picture picture : pictureList) {
+                picture.markAsInvalid();
+                pictureRepository.save(picture);
+            }
         }
 
         validMemo.markAsInvalid();
