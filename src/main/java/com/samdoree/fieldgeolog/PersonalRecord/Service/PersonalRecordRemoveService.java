@@ -31,19 +31,23 @@ public class PersonalRecordRemoveService {
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
         // PersonalRecord와 1:1 연관관계를 맺는 Article 객체의 유효성 false로 자동 설정
-        Article article = articleRepository.findByPersonalRecordId(personalRecordId);
-        article.markAsInvalid();
-        articleRepository.save(article);
+        if (articleRepository.existsByPersonalRecordId(personalRecordId)) {
+            Article article = articleRepository.findByPersonalRecordId(personalRecordId);
+            article.markAsInvalid();
+            articleRepository.save(article);
+        }
 
         // PersonalRecord와 1:N 연관관계를 맺는 Spot 객체의 isValid 속성을 모두 false로 설정
-        List<Spot> spotList = spotRepository.findAllByPersonalRecordId(personalRecordId)
-                .stream()
-                .filter(spot -> spot.isValid())
-                .collect(Collectors.toList());
+        if (spotRepository.existsByPersonalRecordId(personalRecordId)) {
+            List<Spot> spotList = spotRepository.findAllByPersonalRecordId(personalRecordId)
+                    .stream()
+                    .filter(spot -> spot.isValid())
+                    .collect(Collectors.toList());
 
-        for (Spot spot : spotList) {
-            spot.markAsInvalid();
-            spotRepository.save(spot);
+            for (Spot spot : spotList) {
+                spot.markAsInvalid();
+                spotRepository.save(spot);
+            }
         }
 
         validPersonalRecord.markAsInvalid();
