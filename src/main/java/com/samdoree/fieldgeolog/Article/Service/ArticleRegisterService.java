@@ -28,11 +28,21 @@ public class ArticleRegisterService {
     public ArticleResponseDTO addArticle(ArticleRequestDTO articleRequestDTO) throws Exception {
 
         Long personalRecordId = articleRequestDTO.getRecordId();
-        PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
-        Article article = articleRepository.save(Article.createFrom(articleRequestDTO, personalRecord));
-        PersonalRecordResponseDTO personalRecordResponseDTO = personalRecordSearchService.getOnePersonalRecord(personalRecordId);
-        return ArticleResponseDTO.fromPersonalRecord(article, personalRecordResponseDTO);
+        // personalRecordId에 연관된 article이 이미 존재하는지 확인
+        Boolean articleExists = articleRepository.existsByPersonalRecordId(personalRecordId);
+
+        if (articleExists) {
+            // 이미 article이 존재하면 예외 처리 또는 다른 로직을 수행할 수 있음
+            throw new RuntimeException("PersonalRecord already has an associated article.");
+        } else {
+            PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                    .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+
+            // 새로운 article 등록
+            Article article = articleRepository.save(Article.createFrom(articleRequestDTO, personalRecord));
+            PersonalRecordResponseDTO personalRecordResponseDTO = personalRecordSearchService.getOnePersonalRecord(personalRecordId);
+            return ArticleResponseDTO.fromPersonalRecord(article, personalRecordResponseDTO);
+        }
     }
 }
