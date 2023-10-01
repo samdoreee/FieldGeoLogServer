@@ -34,14 +34,16 @@ public class SpotRemoveService {
                 .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
         // Spot와 1:N 연관관계를 맺는 Memo 객체의 isValid 속성을 모두 false로 설정
-        List<Memo> memoList = memoRepository.findAllBySpotId(spotId)
-                .stream()
-                .filter(memo -> memo.isValid())
-                .collect(Collectors.toList());
+        if (memoRepository.existsById(spotId)) {
+            List<Memo> memoList = memoRepository.findAllBySpotId(spotId)
+                    .stream()
+                    .filter(memo -> memo.isValid())
+                    .collect(Collectors.toList());
 
-        for (Memo memo : memoList) {
-            memo.markAsInvalid();
-            memoRepository.save(memo);
+            for (Memo memo : memoList) {
+                memo.markAsInvalid();
+                memoRepository.save(memo);
+            }
         }
 
         validSpot.markAsInvalid();
