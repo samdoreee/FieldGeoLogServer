@@ -10,4 +10,5 @@ import java.util.List;
 @EnableJpaAuditing
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByArticleId(Long articleId);
+    Boolean existsByArticleId(Long articleId);
 }
