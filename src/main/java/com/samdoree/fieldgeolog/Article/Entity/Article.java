@@ -4,7 +4,6 @@ import com.samdoree.fieldgeolog.Article.DTO.ArticleRequestDTO;
 import com.samdoree.fieldgeolog.Comment.Entity.Comment;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -31,6 +30,9 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Comment> commentList = new ArrayList<>();
 
+    // PersonalRecord에 등록된 썸네일 Path를 저장하기 위한 필드
+    private String thumbnailPath;
+
     private String title;
 
     @CreatedDate
@@ -47,6 +49,16 @@ public class Article {
         this.title = personalRecord.getRecordTitle();
         this.createDT = LocalDateTime.now();
         this.isValid = true;
+
+        // PersonalRecord에 등록된 썸네일 Path를 가져와서 저장
+        if (personalRecord != null && personalRecord.getThumbnailPath() != null) {
+            this.thumbnailPath = personalRecord.getThumbnailPath();
+        }
+    }
+
+    // PersonalRecord에 등록된 썸네일 Path를 설정
+    public void updateThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
     }
 
     //== 유효성 필드 메서드 ==//

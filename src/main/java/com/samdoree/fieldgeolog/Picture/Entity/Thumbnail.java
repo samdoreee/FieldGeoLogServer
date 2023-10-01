@@ -1,6 +1,6 @@
 package com.samdoree.fieldgeolog.Picture.Entity;
 
-import com.samdoree.fieldgeolog.Memo.Entity.Memo;
+import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.Picture.DTO.PictureRequestDTO;
 import lombok.*;
 
@@ -12,20 +12,20 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Picture {
+public class Thumbnail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "picture_id")
     private Long id;
 
-    // Picture 엔터티와 Memo 엔터티 간의 N:1 관계 설정
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memo_id")   // 외래 키를 가지고 있는 열 지정
-    private Memo memo;  // Picture와 연결된 Memo
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "personalRecord_id")
+    private PersonalRecord personalRecord;
 
-    @OneToOne(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Thumbnail thumbnail;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "picture_id")
+    private Picture picture;
 
     @Column(name = "file_name")
     private String fileName;
@@ -35,18 +35,30 @@ public class Picture {
 
     private Boolean isValid;
 
-    public static Picture createFrom(Memo memo, PictureRequestDTO pictureRequestDTO) {
-        return Picture.builder()
-                .memo(memo)
+    public static Thumbnail createFrom(PictureRequestDTO pictureRequestDTO) {
+        return Thumbnail.builder()
                 .fileName(pictureRequestDTO.getFileName())
                 .filePath(pictureRequestDTO.getFilePath())
                 .isValid(true)
                 .build();
     }
 
-    public void modifyPicture(PictureRequestDTO pictureRequestDTO) {
+    public Thumbnail(String fileName, String filePath) {
+        this.fileName = fileName;
+        this.filePath = filePath;
+    }
+
+    public void modifyThumbnail(PictureRequestDTO pictureRequestDTO) {
         this.fileName = pictureRequestDTO.getFileName();
         this.filePath = pictureRequestDTO.getFilePath();
+    }
+
+    public String getThumbnailPath(){
+        return filePath;
+    }
+
+    public void updateFilePath(String filePath){
+        this.filePath = filePath;
     }
 
     //== 유효성 필드 메서드 ==//
@@ -59,11 +71,11 @@ public class Picture {
     }
 
     //== 연관관계 메서드 ==//
-    public void belongToMemo(Memo memo) {
-        this.memo = memo;
+    public void belongToPersonalRecord(PersonalRecord personalRecord) {
+        this.personalRecord = personalRecord;
     }
 
-    public void belongToThumbnail(Thumbnail thumbnailPicture) {
-        this.thumbnail = thumbnailPicture;
+    public void belongToPicture(Picture picture) {
+        this.picture = picture;
     }
 }

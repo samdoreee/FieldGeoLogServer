@@ -5,6 +5,7 @@ import com.samdoree.fieldgeolog.Memo.Repository.MemoRepository;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
 import com.samdoree.fieldgeolog.Picture.Entity.Picture;
+import com.samdoree.fieldgeolog.Picture.Entity.Thumbnail;
 import com.samdoree.fieldgeolog.Picture.Repository.PictureRepository;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import com.samdoree.fieldgeolog.Spot.Repository.SpotRepository;
@@ -24,6 +25,7 @@ public class PictureRemoveService {
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
     private final PictureRepository pictureRepository;
+    private final Thumbnail thumbnail; // Thumbnail 빈을 주입합니다.
 
     @Transactional
     public boolean removePicture(Long personalRecordId, Long spotId, Long memoId, Long pictureId) {
@@ -43,6 +45,15 @@ public class PictureRemoveService {
 
         validPicture.markAsInvalid();
         pictureRepository.save(validPicture);
+
+        validPersonalRecord.updateThumbnailPicture();
+        personalRecordRepository.save(validPersonalRecord);
+
+        // 현재 thumbnail 객체의 filePath를 확인하고 "basicImage.jpg"인 경우에만 변경
+        if ("src/main/resources/Image/basicImage.jpg".equals(thumbnail.getThumbnailPath())) {
+            thumbnail.updateFilePath(validPicture.getFilePath());
+            // thumbnail 객체를 데이터베이스에 저장하지 않습니다. (별도의 repository.save() 호출 X)
+        }
         return true;
     }
 }
