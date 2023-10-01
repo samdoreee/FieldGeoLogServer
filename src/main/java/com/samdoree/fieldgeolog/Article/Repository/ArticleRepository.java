@@ -10,6 +10,6 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     Article findByPersonalRecordId(Long personalRecordId);
     List<Article> findByTitleContaining(String title);
-//    List<Article> findByNicknameContaining(String nickname);
+    //    List<Article> findByNicknameContaining(String nickname);
     Boolean existsByPersonalRecordId(Long personalRecordId);
 }
