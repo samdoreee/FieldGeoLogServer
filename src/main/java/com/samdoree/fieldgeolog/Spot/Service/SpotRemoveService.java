@@ -2,6 +2,7 @@ package com.samdoree.fieldgeolog.Spot.Service;
 
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import com.samdoree.fieldgeolog.Memo.Repository.MemoRepository;
+import com.samdoree.fieldgeolog.Memo.Service.MemoRemoveService;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.PersonalRecord.Repository.PersonalRecordRepository;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
@@ -22,6 +23,7 @@ public class SpotRemoveService {
     private final PersonalRecordRepository personalRecordRepository;
     private final SpotRepository spotRepository;
     private final MemoRepository memoRepository;
+    private final MemoRemoveService memoRemoveService;
 
     @Transactional
     public boolean removeSpot(Long personalRecordId, Long spotId) {
@@ -34,20 +36,32 @@ public class SpotRemoveService {
                 .orElseThrow(() -> new NoSuchElementException("Spot not found or is not valid."));
 
         // Spot와 1:N 연관관계를 맺는 Memo 객체의 isValid 속성을 모두 false로 설정
+        removeMemoList(personalRecordId, spotId);
+
+        validSpot.markAsInvalid();
+        spotRepository.save(validSpot);
+        return true;
+    }
+
+    @Transactional
+    public boolean removeMemoList(Long personalRecordId, Long spotId) {
+
         if (memoRepository.existsById(spotId)) {
+
             List<Memo> memoList = memoRepository.findAllBySpotId(spotId)
                     .stream()
                     .filter(memo -> memo.isValid())
                     .collect(Collectors.toList());
 
             for (Memo memo : memoList) {
+
+                Long memoId = memo.getId();
+                memoRemoveService.removeMemo(personalRecordId, spotId, memoId);
+
                 memo.markAsInvalid();
                 memoRepository.save(memo);
             }
         }
-
-        validSpot.markAsInvalid();
-        spotRepository.save(validSpot);
         return true;
     }
 }
