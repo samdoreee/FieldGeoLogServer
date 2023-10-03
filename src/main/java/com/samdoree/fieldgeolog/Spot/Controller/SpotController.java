@@ -45,7 +45,7 @@ public class SpotController {
     }
 
     @DeleteMapping("/{spotId}")
-    public Boolean removeSpot(@PathVariable Long personalRecordId, @PathVariable Long spotId) {
+    public Boolean removeSpot(@PathVariable Long personalRecordId, @PathVariable Long spotId) throws Exception {
         return spotRemoveService.removeSpot(personalRecordId, spotId);
     }
 }

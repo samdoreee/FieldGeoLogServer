@@ -26,7 +26,7 @@ public class SpotRemoveService {
     private final MemoRemoveService memoRemoveService;
 
     @Transactional
-    public boolean removeSpot(Long personalRecordId, Long spotId) {
+    public boolean removeSpot(Long personalRecordId, Long spotId) throws Exception {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
                 .filter(personalRecord -> personalRecord.isValid())
@@ -44,7 +44,7 @@ public class SpotRemoveService {
     }
 
     @Transactional
-    public boolean removeMemoList(Long personalRecordId, Long spotId) {
+    public boolean removeMemoList(Long personalRecordId, Long spotId) throws Exception {
 
         if (memoRepository.existsById(spotId)) {
 

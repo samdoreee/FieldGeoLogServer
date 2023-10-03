@@ -2,11 +2,12 @@ package com.samdoree.fieldgeolog.Spot.Entity;
 
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
+import com.samdoree.fieldgeolog.Picture.Entity.Picture;
 import com.samdoree.fieldgeolog.Spot.Service.WeatherApi;
+import com.samdoree.fieldgeolog.Thumbnail.Entity.Thumbnail;
 import lombok.*;
 import com.samdoree.fieldgeolog.Spot.DTO.SpotEditRequestDTO;
 import com.samdoree.fieldgeolog.Spot.DTO.SpotInsertRequestDTO;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -36,6 +37,9 @@ public class Spot {
     @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Memo> memoList = new ArrayList<>();
 
+    @OneToOne(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Thumbnail thumbnail;
+    private String thumbnailPath;
     private Boolean isValid;
 
     //==  1. 자동입력 정보 ===//
@@ -107,6 +111,34 @@ public class Spot {
             this.direction = spotRequestDTO.getDirection();
     }
 
+    // 썸네일 사진 update하기
+//    public Thumbnail updateThumbnailPicture() {
+//
+//        List<Memo> memos = this.getMemoList();
+//        if (!memos.isEmpty()) {
+//            for (Memo memo : memos) {
+//                List<Picture> pictures = memo.getPictureList();
+//                if (!pictures.isEmpty()) {
+//                    for (Picture picture : pictures) {
+//                        if (picture.isValid()) {
+//                            // 유효한 Picture를 찾으면 새로운 썸네일로 설정
+//                            Thumbnail newThumbnail = Thumbnail.createFrom(null, this, picture);
+//                            thumbnailPath = newThumbnail.getFilePath();
+//                            return newThumbnail; // 썸네일 설정이 완료되었으므로 반복 종료
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        Thumbnail newThumbnail = Thumbnail.createFrom(null, this, null);
+//        thumbnailPath = newThumbnail.getFilePath();
+//        return newThumbnail;
+//    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
+    }
+
     //== 유효성 필드 메서드 ==//
     public void markAsInvalid() {
         this.isValid = false;
@@ -129,4 +161,9 @@ public class Spot {
     public void belongToPersonalRecord(PersonalRecord personalRecord) {
         this.personalRecord = personalRecord;
     }
+
+    public void belongToThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
 }
