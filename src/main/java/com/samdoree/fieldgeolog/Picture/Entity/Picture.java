@@ -2,9 +2,12 @@ package com.samdoree.fieldgeolog.Picture.Entity;
 
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import com.samdoree.fieldgeolog.Picture.DTO.PictureRequestDTO;
+import com.samdoree.fieldgeolog.Thumbnail.Entity.Thumbnail;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,8 +27,8 @@ public class Picture {
     @JoinColumn(name = "memo_id")   // 외래 키를 가지고 있는 열 지정
     private Memo memo;  // Picture와 연결된 Memo
 
-    @OneToOne(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Thumbnail thumbnail;
+    @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Thumbnail> thumbnailList = new ArrayList<>();
 
     @Column(name = "file_name")
     private String fileName;
@@ -49,6 +52,7 @@ public class Picture {
         this.filePath = pictureRequestDTO.getFilePath();
     }
 
+
     //== 유효성 필드 메서드 ==//
     public void markAsInvalid() {
         this.isValid = false;
@@ -58,12 +62,19 @@ public class Picture {
         return isValid;
     }
 
+
     //== 연관관계 메서드 ==//
     public void belongToMemo(Memo memo) {
         this.memo = memo;
     }
 
-    public void belongToThumbnail(Thumbnail thumbnailPicture) {
-        this.thumbnail = thumbnailPicture;
+    public void addThumbnail(Thumbnail thumbnail) {
+        thumbnailList.add(thumbnail);
+        thumbnail.belongToPicture(this);
     }
+
+    public void removeThumbnail() {
+        thumbnailList.clear();
+    }
+
 }

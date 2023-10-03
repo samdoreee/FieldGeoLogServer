@@ -44,7 +44,7 @@ public class PictureController {
     }
 
     @DeleteMapping("/{pictureId}")
-    public Boolean removePicture(@PathVariable Long personalRecordId, @PathVariable Long spotId, @PathVariable Long memoId, @PathVariable Long pictureId) {
+    public Boolean removePicture(@PathVariable Long personalRecordId, @PathVariable Long spotId, @PathVariable Long memoId, @PathVariable Long pictureId) throws Exception {
         return pictureRemoveService.removePicture(personalRecordId, spotId, memoId, pictureId);
     }
 
