@@ -108,7 +108,7 @@ public class PictureRemoveService {
                                 if (picture.isValid()) {
                                     // 유효한 Picture를 찾으면 새로운 썸네일로 설정
                                     Thumbnail newThumbnail = thumbnailRegisterService.addPersonalRecordThumbnail(personalRecord, picture);
-                                    personalRecord.setThumbnailPath(newThumbnail.getFilePath());
+                                    personalRecord.setFileName(newThumbnail.getFileName());
                                     thumbnailRepository.save(newThumbnail);
                                     return newThumbnail; // 썸네일 설정이 완료되었으므로 반복 종료
                                 }
@@ -119,7 +119,7 @@ public class PictureRemoveService {
             }
         }
         Thumbnail newThumbnail = thumbnailRegisterService.addPersonalRecordThumbnail(personalRecord, null);
-        personalRecord.setThumbnailPath(newThumbnail.getFilePath());
+        personalRecord.setFileName(newThumbnail.getFileName());
         thumbnailRepository.save(newThumbnail);
         return newThumbnail;
     }
@@ -135,7 +135,7 @@ public class PictureRemoveService {
                         if (picture.isValid()) {
                             // 유효한 Picture를 찾으면 새로운 썸네일로 설정
                             Thumbnail newThumbnail = thumbnailRegisterService.addSpotThumbnail(spot, picture);
-                            spot.setThumbnailPath(newThumbnail.getFilePath());
+                            spot.setFileName(newThumbnail.getFileName());
                             thumbnailRepository.save(newThumbnail);
                             return newThumbnail; // 썸네일 설정이 완료되었으므로 반복 종료
                         }
@@ -144,7 +144,7 @@ public class PictureRemoveService {
             }
         }
         Thumbnail newThumbnail = thumbnailRegisterService.addSpotThumbnail(spot, null);
-        spot.setThumbnailPath(newThumbnail.getFilePath());
+        spot.setFileName(newThumbnail.getFileName());
         thumbnailRepository.save(newThumbnail);
         return newThumbnail;
     }

@@ -25,7 +25,7 @@ public class PersonalRecordRegisterService {
 
         // PersonalRecord에 대한 Thumbnail 생성 및 연결
         Thumbnail thumbnail = thumbnailRegisterService.addPersonalRecordThumbnail(personalRecord, null);
-        personalRecord.setThumbnailPath(thumbnail.getFilePath());
+        personalRecord.setFileName(thumbnail.getFileName());
 
         // PersonalRecord 저장
         personalRecordRepository.save(personalRecord);

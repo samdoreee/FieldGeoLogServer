@@ -67,7 +67,7 @@ public class PictureRegisterService {
             thumbnailRepository.save(exsitingThumbnail);
 
             Thumbnail newThumbnail = thumbnailRegisterService.addPersonalRecordThumbnail(validPersonalRecord, picture);
-            validPersonalRecord.setThumbnailPath(newThumbnail.getFilePath());
+            validPersonalRecord.setFileName(newThumbnail.getFileName());
         }
 
         // Case 2-2) Spot에 대한 기존 Thumbnail 제거 및 생성 및 연결
@@ -77,7 +77,7 @@ public class PictureRegisterService {
             thumbnailRepository.save(exsitingThumbnail);
 
             Thumbnail newThumbnail = thumbnailRegisterService.addSpotThumbnail(validSpot, picture);
-            validSpot.setThumbnailPath(newThumbnail.getFilePath());
+            validSpot.setFileName(newThumbnail.getFileName());
         }
 
         pictureRepository.save(picture);

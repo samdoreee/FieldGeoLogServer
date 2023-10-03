@@ -38,8 +38,8 @@ public class Thumbnail {
     @JoinColumn(name = "picture_id")
     private Picture picture;
 
-    @Column(name = "file_path")
-    private String filePath;
+    @Column(name = "file_name")
+    private String fileName;
 
     private Boolean isValid;
 
@@ -47,25 +47,25 @@ public class Thumbnail {
     public static Thumbnail createFrom(PersonalRecord personalRecord, Spot spot, Picture picture) {
 
         ThumbnailType type;
-        String filePath;
+        String fileName;
         if (picture == null) {
             type = ThumbnailType.None;
             // personalRecord와 spot 모두 null인 경우 기본 이미지 경로를 설정함
-            filePath = "src/main/resources/Image/basicImage.jpg";
+            fileName = "src/main/resources/Image/basicImage.jpg";
         } else if (spot != null) {
             type = ThumbnailType.SPOT;
-            // filePath를 spot의 썸네일 경로로 설정
-            filePath = picture.getFilePath();
+            // fileName을 spot의 썸네일 경로로 설정
+            fileName = picture.getFileName();
         } else {   //personalRecord != null
             type = ThumbnailType.PERSONAL_RECORD;
-            // filePath를 personalRecord의 썸네일 경로로 설정
-            filePath = picture.getFilePath();
+            // fileName을 personalRecord의 썸네일 경로로 설정
+            fileName = picture.getFileName();
         }
 
         Thumbnail thumbnail = Thumbnail.builder()
                 .personalRecord(personalRecord)
                 .spot(spot)
-                .filePath(filePath)
+                .fileName(fileName)
                 .thumbnailType(type)
                 .isValid(true)
                 .build();
