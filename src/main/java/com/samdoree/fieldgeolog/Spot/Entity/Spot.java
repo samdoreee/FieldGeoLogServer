@@ -39,7 +39,7 @@ public class Spot {
 
     @OneToOne(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
     private Thumbnail thumbnail;
-    private String thumbnailPath;
+    private String fileName;   // Thumbnail 파일 이름
     private Boolean isValid;
 
     //==  1. 자동입력 정보 ===//
@@ -135,8 +135,8 @@ public class Spot {
 //        return newThumbnail;
 //    }
 
-    public void setThumbnailPath(String thumbnailPath) {
-        this.thumbnailPath = thumbnailPath;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     //== 유효성 필드 메서드 ==//
