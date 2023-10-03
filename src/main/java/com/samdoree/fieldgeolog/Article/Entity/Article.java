@@ -51,14 +51,7 @@ public class Article {
         this.isValid = true;
 
         // PersonalRecord에 등록된 썸네일 Path를 가져와서 저장
-        if (personalRecord != null && personalRecord.getThumbnailPath() != null) {
-            this.thumbnailPath = personalRecord.getThumbnailPath();
-        }
-    }
-
-    // PersonalRecord에 등록된 썸네일 Path를 설정
-    public void updateThumbnailPath(String thumbnailPath) {
-        this.thumbnailPath = thumbnailPath;
+        this.thumbnailPath = personalRecord.getThumbnailPath();
     }
 
     //== 유효성 필드 메서드 ==//
