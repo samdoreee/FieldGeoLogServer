@@ -30,13 +30,7 @@ public class PersonalRecordResponseDTO {
         this.createDT = personalRecord.getCreateDT();
         this.modifyDT = personalRecord.getModifyDT();
         this.spotResponseDTOList = personalRecord.getSpotList().stream().map(SpotResponseDTO::new).collect(Collectors.toList());
-
-        if (personalRecord.getThumbnailPath() != null) {
-            this.thumbnailPath = personalRecord.getThumbnailPath();
-        } else {
-            // 썸네일 사진이 없는 경우에 대한 처리 (예: 기본 이미지 경로 설정)
-            this.thumbnailPath = "src/main/resources/Image/basicImage.jpg";
-        }
+        this.thumbnailPath = personalRecord.getThumbnailPath();
     }
 
     public static PersonalRecordResponseDTO from(PersonalRecord personalRecord) {

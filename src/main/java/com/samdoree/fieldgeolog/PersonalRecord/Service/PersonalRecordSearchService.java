@@ -27,10 +27,6 @@ public class PersonalRecordSearchService {
                 .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
 
-        for (PersonalRecord personalRecord : validPersonalRecordList) {
-            personalRecord.updateThumbnailPicture();
-        }
-
         return validPersonalRecordList.stream()
                 .map(PersonalRecordResponseDTO::new)
                 .collect(Collectors.toList());
@@ -43,10 +39,6 @@ public class PersonalRecordSearchService {
                 .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
 
-        for (PersonalRecord personalRecord : validPersonalRecordList) {
-            personalRecord.updateThumbnailPicture();
-        }
-
         return validPersonalRecordList.stream()
                 .map(PersonalRecordResponseDTO::new)
                 .collect(Collectors.toList());
@@ -58,10 +50,6 @@ public class PersonalRecordSearchService {
                 .stream()
                 .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
-
-        for (PersonalRecord personalRecord : validPersonalRecordList) {
-            personalRecord.updateThumbnailPicture();
-        }
 
         return validPersonalRecordList.stream()
                 .map(PersonalRecordResponseDTO::new)
@@ -76,10 +64,6 @@ public class PersonalRecordSearchService {
                 .filter(personalRecord -> personalRecord.isValid())
                 .collect(Collectors.toList());
 
-        for (PersonalRecord personalRecord : validPersonalRecordList) {
-            personalRecord.updateThumbnailPicture();
-        }
-
         return validPersonalRecordList.stream()
                 .map(PersonalRecordResponseDTO::new)
                 .collect(Collectors.toList());
@@ -92,10 +76,6 @@ public class PersonalRecordSearchService {
 //                .stream()
 //                .filter(personalRecord -> personalRecord.isValid())
 //                .collect(Collectors.toList());
-//
-//        for (PersonalRecord personalRecord : validPersonalRecordList) {
-//            personalRecord.updateThumbnailPicture();
-//        }
 //
 //        return validPersonalRecordList.stream()
 //                .map(PersonalRecordResponseDTO::new)
@@ -114,8 +94,6 @@ public class PersonalRecordSearchService {
                 .filter(personalRecord -> personalRecord.isValid())
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
-
-        validPersonalRecord.updateThumbnailPicture();
         return PersonalRecordResponseDTO.from(validPersonalRecord);
     }
 }

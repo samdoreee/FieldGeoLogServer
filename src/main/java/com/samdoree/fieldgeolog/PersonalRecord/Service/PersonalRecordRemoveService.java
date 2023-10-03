@@ -26,7 +26,7 @@ public class PersonalRecordRemoveService {
     private final SpotRemoveService spotRemoveService;
 
     @Transactional
-    public boolean removePersonalRecord(Long personalRecordId) {
+    public boolean removePersonalRecord(Long personalRecordId) throws Exception {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
                 .filter(personalRecord -> personalRecord.isValid())

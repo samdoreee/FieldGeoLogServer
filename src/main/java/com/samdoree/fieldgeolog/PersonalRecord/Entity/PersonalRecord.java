@@ -4,8 +4,8 @@ import com.samdoree.fieldgeolog.Article.Entity.Article;
 import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
 import com.samdoree.fieldgeolog.Picture.Entity.Picture;
-import com.samdoree.fieldgeolog.Picture.Entity.Thumbnail;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
+import com.samdoree.fieldgeolog.Thumbnail.Entity.Thumbnail;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -32,10 +32,8 @@ public class PersonalRecord {
     @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private Article article;
 
-    // PersonalRecord 엔터티와 Thumbnail 엔터티 간의 1:1 관계 설정
     @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Thumbnail thumbnail; // PersonalRecord와 연결된 썸네일 사진
-
+    private Thumbnail thumbnail;
     private String thumbnailPath;
 
     private Boolean isValid;
@@ -53,68 +51,49 @@ public class PersonalRecord {
         return new PersonalRecord(personalRecordRequestDTO);
     }
 
-    public PersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
+    private PersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
         this.recordTitle = personalRecordRequestDTO.getRecordTitle();
         this.createDT = LocalDateTime.now();
         this.modifyDT = LocalDateTime.now();
         this.isValid = true;
-
-        if (this.thumbnail == null) {
-            thumbnailPath = "src/main/resources/Image/basicImage.jpg";
-        }
     }
 
     public void modifyPersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
         this.recordTitle = personalRecordRequestDTO.getRecordTitle();
         this.modifyDT = LocalDateTime.now();
-        updateThumbnailPicture();
     }
 
     // 썸네일 사진 update하기
-    public void updateThumbnailPicture() {
-        Thumbnail newThumbnail = null; // 새로운 썸네일 객체를 초기화
+//    public Thumbnail updateThumbnailPicture() {
+//
+//        List<Spot> spots = this.getSpotList();
+//        if (!spots.isEmpty()) {
+//            for (Spot spot : spots) {
+//                List<Memo> memos = spot.getMemoList();
+//                if (!memos.isEmpty()) {
+//                    for (Memo memo : memos) {
+//                        List<Picture> pictures = memo.getPictureList();
+//                        if (!pictures.isEmpty()) {
+//                            for (Picture picture : pictures) {
+//                                if (picture.isValid()) {
+//                                    // 유효한 Picture를 찾으면 새로운 썸네일로 설정
+//                                    Thumbnail newThumbnail = Thumbnail.createFrom(this, null, picture);
+//                                    thumbnailPath = newThumbnail.getFilePath();
+//                                    return newThumbnail; // 썸네일 설정이 완료되었으므로 반복 종료
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        Thumbnail newThumbnail = Thumbnail.createFrom(this, null, null);
+//        thumbnailPath = newThumbnail.getFilePath();
+//        return newThumbnail;
+//    }
 
-        List<Spot> spots = this.getSpotList();
-        if (!spots.isEmpty()) {
-            for (Spot spot : spots) {
-                List<Memo> memos = spot.getMemoList();
-                if (!memos.isEmpty()) {
-                    for (Memo memo : memos) {
-                        List<Picture> pictures = memo.getPictureList();
-                        if (!pictures.isEmpty()) {
-                            for (Picture picture : pictures) {
-                                if (picture.isValid()) {
-                                    newThumbnail = picture.getThumbnail(); // 유효한 Picture를 찾으면 새로운 썸네일로 설정
-                                    break; // 썸네일 설정이 완료되었으므로 반복 종료
-                                }
-                            }
-                        }
-                        if (newThumbnail != null) {
-                            break; // 썸네일 설정이 완료되었으므로 반복 종료
-                        }
-                    }
-                }
-                if (newThumbnail != null) {
-                    break; // 썸네일 설정이 완료되었으므로 반복 종료
-                }
-            }
-        }
-
-        // 새로운 썸네일이 설정되었으면 현재의 thumbnailPicture을 갱신
-        if (newThumbnail != null) {
-            this.thumbnail = newThumbnail;
-            this.thumbnailPath = newThumbnail.getFilePath();
-        } else {
-            // 유효한 썸네일이 없을 경우, 기본 이미지로 유지
-            this.thumbnail = createBasicImage();
-            this.thumbnailPath = this.getThumbnailPath();
-        }
-    }
-
-    // 기본 썸네일 생성 메서드
-    private Thumbnail createBasicImage() {
-        Thumbnail basicImage = new Thumbnail("basicImage", "src/main/resources/Image/basicImage.jpg");
-        return basicImage;
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
     }
 
     // 유효성 필드 메서드
@@ -136,7 +115,7 @@ public class PersonalRecord {
         spotList.clear();
     }
 
-    public void belongToThumbnail(Thumbnail thumbnailPicture) {
-        this.thumbnail = thumbnailPicture;
+    public void belongToThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
     }
 }
