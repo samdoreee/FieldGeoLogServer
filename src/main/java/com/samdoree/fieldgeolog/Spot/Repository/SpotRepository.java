@@ -10,4 +10,5 @@ import java.util.List;
 @EnableJpaAuditing
 public interface SpotRepository extends JpaRepository<Spot, Long> {
     List<Spot> findAllByPersonalRecordId(Long personalRecordId);
+    Boolean existsByPersonalRecordId(Long personalRecordId);
 }

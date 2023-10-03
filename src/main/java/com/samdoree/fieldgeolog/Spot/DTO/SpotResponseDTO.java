@@ -28,6 +28,7 @@ public class SpotResponseDTO {
     private Integer dip;
     private String direction;
     private List<MemoResponseDTO> memoResponseDTOList;
+    private String thumbnailPath;
 
     public SpotResponseDTO(Spot spot) {
         this.id = spot.getId();
@@ -42,6 +43,7 @@ public class SpotResponseDTO {
         this.dip = spot.getDip();
         this.direction = spot.getDirection();
         this.memoResponseDTOList = spot.getMemoList().stream().map(MemoResponseDTO::new).collect(Collectors.toList());
+        this.thumbnailPath = spot.getThumbnailPath();
     }
 
     public static SpotResponseDTO from(Spot spot) {

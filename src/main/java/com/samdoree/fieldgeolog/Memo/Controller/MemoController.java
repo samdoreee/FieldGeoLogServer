@@ -43,7 +43,7 @@ public class MemoController {
     }
 
     @DeleteMapping("/{memoId}")
-    public Boolean removeMemo(@PathVariable Long personalRecordId, @PathVariable Long spotId, @PathVariable Long memoId) {
+    public Boolean removeMemo(@PathVariable Long personalRecordId, @PathVariable Long spotId, @PathVariable Long memoId) throws Exception {
         return memoRemoveService.removeMemo(personalRecordId, spotId, memoId);
     }
 

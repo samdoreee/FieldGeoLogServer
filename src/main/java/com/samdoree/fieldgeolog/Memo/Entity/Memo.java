@@ -27,6 +27,8 @@ public class Memo {
     @JoinColumn(name = "spot_id")
     private Spot spot;
 
+    // Memo 엔터티와 Picture 엔터티 간의 1:N 관계 설정
+    // "memo"는 Picture 엔터티의 memo 필드 이름과 동일해야 합니다.
     @OneToMany(mappedBy = "memo", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Picture> pictureList = new ArrayList<>();
 

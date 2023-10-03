@@ -70,7 +70,7 @@ public class PersonalRecordController {
     }
 
     @DeleteMapping("/api/personalRecords/{personalRecordId}")
-    public Boolean removePersonalRecord(@PathVariable Long personalRecordId) {
+    public Boolean removePersonalRecord(@PathVariable Long personalRecordId) throws Exception {
         return personalRecordRemoveService.removePersonalRecord(personalRecordId);
     }
 }

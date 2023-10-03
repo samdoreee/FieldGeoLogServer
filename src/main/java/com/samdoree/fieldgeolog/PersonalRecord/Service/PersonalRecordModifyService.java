@@ -28,9 +28,11 @@ public class PersonalRecordModifyService {
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
         // 해당 PersonalRecord와 1:1 관계를 맺고 있는 Article isValid = false로 설정
-        Article article = articleRepository.findByPersonalRecordId(personalRecordId);
-        article.markAsInvalid();
-        articleRepository.save(article);
+        if (articleRepository.existsByPersonalRecordId(personalRecordId)) {
+            Article article = articleRepository.findByPersonalRecordId(personalRecordId);
+            article.markAsInvalid();
+            articleRepository.save(article);
+        }
 
         validPersonalRecord.modifyPersonalRecord(personalRecordRequestDTO);
         return PersonalRecordResponseDTO.from(validPersonalRecord);

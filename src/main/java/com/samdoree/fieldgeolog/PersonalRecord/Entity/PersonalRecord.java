@@ -1,10 +1,12 @@
 package com.samdoree.fieldgeolog.PersonalRecord.Entity;
 
 import com.samdoree.fieldgeolog.Article.Entity.Article;
+import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
+import com.samdoree.fieldgeolog.Picture.Entity.Picture;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
+import com.samdoree.fieldgeolog.Thumbnail.Entity.Thumbnail;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -27,8 +29,12 @@ public class PersonalRecord {
     @OneToMany(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Spot> spotList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private Article article;
+
+    @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Thumbnail thumbnail;
+    private String thumbnailPath;
 
     private Boolean isValid;
 
@@ -45,7 +51,7 @@ public class PersonalRecord {
         return new PersonalRecord(personalRecordRequestDTO);
     }
 
-    public PersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
+    private PersonalRecord(PersonalRecordRequestDTO personalRecordRequestDTO) {
         this.recordTitle = personalRecordRequestDTO.getRecordTitle();
         this.createDT = LocalDateTime.now();
         this.modifyDT = LocalDateTime.now();
@@ -57,7 +63,40 @@ public class PersonalRecord {
         this.modifyDT = LocalDateTime.now();
     }
 
-    //== 유효성 필드 메서드 ==//
+    // 썸네일 사진 update하기
+//    public Thumbnail updateThumbnailPicture() {
+//
+//        List<Spot> spots = this.getSpotList();
+//        if (!spots.isEmpty()) {
+//            for (Spot spot : spots) {
+//                List<Memo> memos = spot.getMemoList();
+//                if (!memos.isEmpty()) {
+//                    for (Memo memo : memos) {
+//                        List<Picture> pictures = memo.getPictureList();
+//                        if (!pictures.isEmpty()) {
+//                            for (Picture picture : pictures) {
+//                                if (picture.isValid()) {
+//                                    // 유효한 Picture를 찾으면 새로운 썸네일로 설정
+//                                    Thumbnail newThumbnail = Thumbnail.createFrom(this, null, picture);
+//                                    thumbnailPath = newThumbnail.getFilePath();
+//                                    return newThumbnail; // 썸네일 설정이 완료되었으므로 반복 종료
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        Thumbnail newThumbnail = Thumbnail.createFrom(this, null, null);
+//        thumbnailPath = newThumbnail.getFilePath();
+//        return newThumbnail;
+//    }
+
+    public void setThumbnailPath(String thumbnailPath) {
+        this.thumbnailPath = thumbnailPath;
+    }
+
+    // 유효성 필드 메서드
     public void markAsInvalid() {
         this.isValid = false;
     }
@@ -66,7 +105,7 @@ public class PersonalRecord {
         return isValid;
     }
 
-    //== 연관관계 메서드 ==//
+    // 연관관계 메서드
     public void addSpot(Spot spot) {
         spotList.add(spot);
         spot.belongToPersonalRecord(this);
@@ -76,4 +115,7 @@ public class PersonalRecord {
         spotList.clear();
     }
 
+    public void belongToThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
+    }
 }
