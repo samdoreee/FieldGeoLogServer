@@ -30,26 +30,26 @@ public class Picture {
     @OneToMany(mappedBy = "picture", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Thumbnail> thumbnailList = new ArrayList<>();
 
+    @Column(name = "file_folder")
+    private String fileFolder;
+
     @Column(name = "file_name")
     private String fileName;
-
-    @Column(name = "file_path")
-    private String filePath;
 
     private Boolean isValid;
 
     public static Picture createFrom(Memo memo, PictureRequestDTO pictureRequestDTO) {
         return Picture.builder()
                 .memo(memo)
+                .fileFolder(pictureRequestDTO.getFileFolder())
                 .fileName(pictureRequestDTO.getFileName())
-                .filePath(pictureRequestDTO.getFilePath())
                 .isValid(true)
                 .build();
     }
 
     public void modifyPicture(PictureRequestDTO pictureRequestDTO) {
+        this.fileFolder = pictureRequestDTO.getFileFolder();
         this.fileName = pictureRequestDTO.getFileName();
-        this.filePath = pictureRequestDTO.getFilePath();
     }
 
 
