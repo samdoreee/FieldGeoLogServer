@@ -29,7 +29,7 @@ public class MemoRemoveService {
     private final PictureRemoveService pictureRemoveService;
 
     @Transactional
-    public boolean removeMemo(Long personalRecordId, Long spotId, Long memoId) {
+    public boolean removeMemo(Long personalRecordId, Long spotId, Long memoId) throws Exception {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
                 .filter(personalRecord -> personalRecord.isValid())
@@ -50,7 +50,7 @@ public class MemoRemoveService {
     }
 
     @Transactional
-    public boolean removePictureList(Long personalRecordId, Long spotId, Long memoId) {
+    public boolean removePictureList(Long personalRecordId, Long spotId, Long memoId) throws Exception {
 
         if (pictureRepository.existsByMemoId(memoId)) {
 
