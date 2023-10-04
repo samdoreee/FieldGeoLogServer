@@ -10,36 +10,21 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserModifyService {
+public class UserRemoveService {
 
 	private final UserRepository userRepository;
-
 	@Transactional
-	public boolean modifyUserNickname(Long userId, String userNickname) throws Exception{
+	public boolean removeUser(Long userId) throws Exception {
 		Optional<User> optionalUser = userRepository.findById(userId);
 
 		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
-			userRepository.updateNickname(user.getId(), userNickname);
+			user.markAsInvalid();
 			userRepository.save(user);
 			return true;
 		} else {
 			return false;
 		}
+
 	}
-
-	@Transactional
-	public boolean modifyUserProfileImage(Long userId, String userProfileImage) throws Exception{
-		Optional<User> optionalUser = userRepository.findById(userId);
-
-		if (optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			userRepository.updateProfileImage(user.getId(), userProfileImage);
-			userRepository.save(user);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 }

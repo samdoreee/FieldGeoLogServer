@@ -4,6 +4,7 @@ import com.samdoree.fieldgeolog.User.DTO.UserRequestDTO;
 import com.samdoree.fieldgeolog.User.DTO.UserResponseDTO;
 import com.samdoree.fieldgeolog.User.Service.UserModifyService;
 import com.samdoree.fieldgeolog.User.Service.UserRegisterService;
+import com.samdoree.fieldgeolog.User.Service.UserRemoveService;
 import com.samdoree.fieldgeolog.User.Service.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class UserController {
 	private final UserRegisterService userRegisterService;
 	private final UserModifyService userModifyService;
 	private final UserSearchService userSearchService;
+	private final UserRemoveService userRemoveService;
 
 	@PostMapping("/add")
 	public UserResponseDTO addUser(@Valid @RequestBody UserRequestDTO userRequestDTO) throws Exception {
@@ -46,7 +48,7 @@ public class UserController {
 
 	@GetMapping("/{userId}/remove")
 	public boolean removeUser(@PathVariable Long userId) throws Exception{
-		return userModifyService.removeUser(userId);
+		return userRemoveService.removeUser(userId);
 	}
 
 }
