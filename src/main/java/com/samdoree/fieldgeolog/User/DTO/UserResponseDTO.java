@@ -3,6 +3,9 @@ package com.samdoree.fieldgeolog.User.DTO;
 import com.samdoree.fieldgeolog.Picture.Entity.Picture;
 import com.samdoree.fieldgeolog.User.Entity.User;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class UserResponseDTO {
 
 	private Long id;
