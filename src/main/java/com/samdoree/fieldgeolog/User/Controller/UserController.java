@@ -31,20 +31,37 @@ public class UserController {
 		return userSearchService.getAllUser();
 	}
 
-	@GetMapping("/{userId}")
-	public UserResponseDTO getOneUser(@PathVariable Long userId) throws Exception{
-		return userSearchService.getOneUser(userId);
+	@PatchMapping("/{userId}")
+	public boolean modifyUser(@PathVariable Long userId,
+		@RequestParam(required = false) String nickname,
+		@RequestParam(required = false) String profileimage) throws Exception {
+
+		boolean nicknameUpdated = true;
+		boolean profileImageUpdated = true;
+
+		if (nickname != null) {
+			nicknameUpdated = userModifyService.modifyUserNickname(userId, nickname);
+		}
+
+		if (profileimage != null) {
+			profileImageUpdated = userModifyService.modifyUserProfileImage(userId, profileimage);
+		}
+
+		if (nickname == null && profileimage == null) {
+			throw new IllegalArgumentException("Either nickname or profileimage or both should be provided.");
+		}
+
+		return nicknameUpdated && profileImageUpdated;
 	}
 
-	@PatchMapping("/{userId}/nickname")
-	public boolean modifyUserNickname(@PathVariable Long userId, @RequestParam String nickname) throws Exception{
-		return userModifyService.modifyUserNickname(userId, nickname);
-	}
-
-	@PatchMapping("/{userId}/profile-image")
-	public boolean modifyUserProfileImage(@PathVariable Long userId, @RequestParam String profileimage) throws Exception{
-		return userModifyService.modifyUserProfileImage(userId, profileimage);
-	}
+	// @GetMapping("/{userId}")
+	// public UserResponseDTO getOneUser(@PathVariable Long userId) throws Exception{
+	// 	return userSearchService.getOneUser(userId);
+	// }
+	// @PatchMapping("/{userId}/profile-image")
+	// public boolean modifyUserProfileImage(@PathVariable Long userId, @RequestParam String profileimage) throws Exception{
+	// 	return userModifyService.modifyUserProfileImage(userId, profileimage);
+	// }
 
 	@DeleteMapping("/{userId}")
 	public boolean removeUser(@PathVariable Long userId) throws Exception{
