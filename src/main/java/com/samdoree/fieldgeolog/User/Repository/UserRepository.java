@@ -14,11 +14,11 @@ import com.samdoree.fieldgeolog.User.Entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	@Modifying
-	@Query("UPDATE User u SET u.nickname = :nickname WHERE u.id = :id")
+	@Query("UPDATE User u SET u.nickName = :nickname WHERE u.id = :id")
 	void updateNickname(@Param("id") Long id, @Param("nickname") String nickname);
 
 	@Modifying
-	@Query("UPDATE User u SET u.profile_image = :profileImage WHERE u.id = :id")
+	@Query("UPDATE User u SET u.profileImage = :profileImage WHERE u.id = :id")
 	void updateProfileImage(@Param("id") Long id, @Param("profileImage") String profileImage);
-}
 
+}

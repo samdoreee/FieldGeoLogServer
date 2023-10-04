@@ -1,2 +1,4 @@
-package com.samdoree.fieldgeolog.User.Service;public class UserSearchService {
+package com.samdoree.fieldgeolog.User.Service;
+
+public class UserSearchService {
 }

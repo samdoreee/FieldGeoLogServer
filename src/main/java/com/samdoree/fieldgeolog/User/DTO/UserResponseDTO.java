@@ -11,7 +11,7 @@ public class UserResponseDTO {
 
 	private String nickName;
 
-	private Picture profileImage;
+	private String profileImage;
 
 	private Boolean isValid;
 
