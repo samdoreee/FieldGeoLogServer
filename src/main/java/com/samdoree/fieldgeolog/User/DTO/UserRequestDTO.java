@@ -16,6 +16,6 @@ public class UserRequestDTO {
 
 	private String nickName;
 
-	private Picture profileImage;
+	private String profileImage;
 
 }

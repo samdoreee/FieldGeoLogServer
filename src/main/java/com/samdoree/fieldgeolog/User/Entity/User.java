@@ -43,8 +43,8 @@ public class User {
 
 	private String nickName;
 
-	@OneToOne(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Picture profileImage;
+	@Column(name = "profile_image")
+	private String profileImage;
 
 	private Boolean isValid;
 
