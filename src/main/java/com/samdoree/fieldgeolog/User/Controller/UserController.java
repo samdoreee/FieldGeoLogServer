@@ -31,6 +31,11 @@ public class UserController {
 		return userSearchService.getAllUser();
 	}
 
+	@GetMapping("/{userId}")
+	public UserResponseDTO getOneUser(@PathVariable Long userId) throws Exception{
+		return userSearchService.getOneUser(userId);
+	}
+
 	@PatchMapping("/{userId}")
 	public boolean modifyUser(@PathVariable Long userId,
 		@RequestParam(required = false) String nickname,
@@ -54,10 +59,7 @@ public class UserController {
 		return nicknameUpdated && profileImageUpdated;
 	}
 
-	// @GetMapping("/{userId}")
-	// public UserResponseDTO getOneUser(@PathVariable Long userId) throws Exception{
-	// 	return userSearchService.getOneUser(userId);
-	// }
+
 	// @PatchMapping("/{userId}/profile-image")
 	// public boolean modifyUserProfileImage(@PathVariable Long userId, @RequestParam String profileimage) throws Exception{
 	// 	return userModifyService.modifyUserProfileImage(userId, profileimage);
