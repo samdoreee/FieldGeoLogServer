@@ -1,14 +1,12 @@
 package com.samdoree.fieldgeolog.PersonalRecord.Entity;
 
 import com.samdoree.fieldgeolog.Article.Entity.Article;
-import com.samdoree.fieldgeolog.Memo.Entity.Memo;
 import com.samdoree.fieldgeolog.PersonalRecord.DTO.PersonalRecordRequestDTO;
-import com.samdoree.fieldgeolog.Picture.Entity.Picture;
 import com.samdoree.fieldgeolog.Spot.Entity.Spot;
 import com.samdoree.fieldgeolog.Thumbnail.Entity.Thumbnail;
+import com.samdoree.fieldgeolog.User.Entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +23,12 @@ public class PersonalRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "personalRecord_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String nickname;
 
     @OneToMany(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Spot> spotList = new ArrayList<>();
@@ -109,6 +113,11 @@ public class PersonalRecord {
     public void addSpot(Spot spot) {
         spotList.add(spot);
         spot.belongToPersonalRecord(this);
+    }
+
+    public void addUserInfo(User user){
+        this.user = user;
+        this.nickname = user.getNickName();
     }
 
     public void removeSpot() {
