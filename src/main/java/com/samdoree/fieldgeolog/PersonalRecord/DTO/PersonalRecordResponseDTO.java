@@ -21,7 +21,7 @@ public class PersonalRecordResponseDTO {
     private LocalDateTime createDT;
     private LocalDateTime modifyDT;
     private List<SpotResponseDTO> spotResponseDTOList;
-    private String thumbnailPath;
+    private String fileName;
 
 
     public PersonalRecordResponseDTO(PersonalRecord personalRecord) {
@@ -30,7 +30,7 @@ public class PersonalRecordResponseDTO {
         this.createDT = personalRecord.getCreateDT();
         this.modifyDT = personalRecord.getModifyDT();
         this.spotResponseDTOList = personalRecord.getSpotList().stream().map(SpotResponseDTO::new).collect(Collectors.toList());
-        this.thumbnailPath = personalRecord.getThumbnailPath();
+        this.fileName = personalRecord.getFileName();
     }
 
     public static PersonalRecordResponseDTO from(PersonalRecord personalRecord) {

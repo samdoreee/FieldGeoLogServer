@@ -35,7 +35,7 @@ public class SpotRegisterService {
 
         // Spot에 대한 Tumbnail 생성 및 연결
         Thumbnail thumbnail = thumbnailRegisterService.addSpotThumbnail(spot, null);
-        spot.setThumbnailPath(thumbnail.getFilePath());
+        spot.setFileName(thumbnail.getFileName());
 
         // Spot 저장
         spotRepository.save(spot);

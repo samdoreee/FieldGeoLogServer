@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 public class PictureResponseDTO {
 
     private Long id;
+    private String fileFolder;
     private String fileName;
-    private String filePath;
 
     public PictureResponseDTO(Picture picture) {
         this.id = picture.getId();
+        this.fileFolder = picture.getFileFolder();
         this.fileName = picture.getFileName();
-        this.filePath = picture.getFilePath();
     }
 
     public static PictureResponseDTO from(Picture picture) {
