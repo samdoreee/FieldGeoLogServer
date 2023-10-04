@@ -21,6 +21,5 @@ public class UserRegisterService {
 
 		userRepository.save(user);
 		return UserResponseDTO.from(user);
-
 	}
 }

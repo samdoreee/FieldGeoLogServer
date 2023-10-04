@@ -34,14 +34,14 @@ public class UserController {
 		return userSearchService.getOneUser(userId);
 	}
 
-	@GetMapping("/{userId}/update")
-	public boolean modifyUserNickname(@PathVariable Long userId, @RequestParam String nickName) throws Exception{
-		return userModifyService.modifyUserNickname(userId, nickName);
+	@GetMapping("/{userId}/update/nickname")
+	public boolean modifyUserNickname(@PathVariable Long userId, @RequestParam String nickname) throws Exception{
+		return userModifyService.modifyUserNickname(userId, nickname);
 	}
 
-	@GetMapping("/{userId}/update")
-	public boolean modifyUserProfileImage(@PathVariable Long userId, @RequestParam String profileImage) throws Exception{
-		return userModifyService.modifyUserProfileImage(userId, profileImage);
+	@GetMapping("/{userId}/update/profile-image")
+	public boolean modifyUserProfileImage(@PathVariable Long userId, @RequestParam String profileimage) throws Exception{
+		return userModifyService.modifyUserProfileImage(userId, profileimage);
 	}
 
 	@GetMapping("/{userId}/remove")
