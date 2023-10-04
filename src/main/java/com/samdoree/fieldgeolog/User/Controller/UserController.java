@@ -21,12 +21,12 @@ public class UserController {
 	private final UserSearchService userSearchService;
 	private final UserRemoveService userRemoveService;
 
-	@PostMapping("/add")
+	@PostMapping()
 	public UserResponseDTO addUser(@Valid @RequestBody UserRequestDTO userRequestDTO) throws Exception {
 		return userRegisterService.addUser(userRequestDTO);
 	}
 
-	@GetMapping("/all")
+	@GetMapping()
 	public List<UserResponseDTO> getAllUserList(){
 		return userSearchService.getAllUser();
 	}
@@ -36,17 +36,17 @@ public class UserController {
 		return userSearchService.getOneUser(userId);
 	}
 
-	@GetMapping("/{userId}/update/nickname")
+	@PatchMapping("/{userId}/nickname")
 	public boolean modifyUserNickname(@PathVariable Long userId, @RequestParam String nickname) throws Exception{
 		return userModifyService.modifyUserNickname(userId, nickname);
 	}
 
-	@GetMapping("/{userId}/update/profile-image")
+	@PatchMapping("/{userId}/profile-image")
 	public boolean modifyUserProfileImage(@PathVariable Long userId, @RequestParam String profileimage) throws Exception{
 		return userModifyService.modifyUserProfileImage(userId, profileimage);
 	}
 
-	@GetMapping("/{userId}/remove")
+	@DeleteMapping("/{userId}")
 	public boolean removeUser(@PathVariable Long userId) throws Exception{
 		return userRemoveService.removeUser(userId);
 	}
