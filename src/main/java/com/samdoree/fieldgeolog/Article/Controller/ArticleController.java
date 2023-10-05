@@ -46,12 +46,11 @@ public class ArticleController {
 
         if ("title".equals(searchType)) {   // 제목 기반 검색
             searchResults = articleSearchService.searchByTitle(keyword);
-//        } else if ("nickname".equals(searchType)) { // 닉네임 기반 검색
-//            searchResults = articleSearchService.searchByNickname(keyword);
+       } else if ("nickname".equals(searchType)) { // 닉네임 기반 검색
+           searchResults = articleSearchService.searchByNickname(keyword);
         } else {
             searchResults = articleSearchService.emptySearchResult();
         }
-
         return searchResults;
     }
 

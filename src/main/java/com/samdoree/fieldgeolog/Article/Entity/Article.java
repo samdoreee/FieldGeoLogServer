@@ -3,6 +3,8 @@ package com.samdoree.fieldgeolog.Article.Entity;
 import com.samdoree.fieldgeolog.Article.DTO.ArticleRequestDTO;
 import com.samdoree.fieldgeolog.Comment.Entity.Comment;
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
+import com.samdoree.fieldgeolog.User.Entity.User;
+
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -35,6 +37,12 @@ public class Article {
 
     private String title;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    private String nickname;
+
     @CreatedDate
     private LocalDateTime createDT;
 
@@ -47,6 +55,8 @@ public class Article {
     public Article(ArticleRequestDTO articleRequestDTO, PersonalRecord personalRecord) {
         this.personalRecord = personalRecord;
         this.title = personalRecord.getRecordTitle();
+        this.user = personalRecord.getUser();
+        this.nickname = personalRecord.getNickname();
         this.createDT = LocalDateTime.now();
         this.isValid = true;
 
