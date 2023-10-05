@@ -29,7 +29,7 @@ public class PersonalRecordRemoveService {
     public boolean removePersonalRecord(Long personalRecordId) throws Exception {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.isValid())
+                .filter(PersonalRecord::isValid)
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
         // PersonalRecord와 1:1 연관관계를 맺는 Article 객체의 유효성 false로 자동 설정
@@ -45,7 +45,7 @@ public class PersonalRecordRemoveService {
 
             List<Spot> spotList = spotRepository.findAllByPersonalRecordId(personalRecordId)
                     .stream()
-                    .filter(spot -> spot.isValid())
+                    .filter(Spot::isValid)
                     .collect(Collectors.toList());
 
             for (Spot spot : spotList) {
