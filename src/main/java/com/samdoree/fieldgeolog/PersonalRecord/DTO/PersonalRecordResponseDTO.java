@@ -2,6 +2,8 @@ package com.samdoree.fieldgeolog.PersonalRecord.DTO;
 
 import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.Spot.DTO.SpotResponseDTO;
+import com.samdoree.fieldgeolog.User.Entity.User;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,8 @@ public class PersonalRecordResponseDTO {
 
     private Long id;
     private String recordTitle;
+    private Long userId;
+    private String nickname;
     private LocalDateTime createDT;
     private LocalDateTime modifyDT;
     private List<SpotResponseDTO> spotResponseDTOList;
@@ -27,6 +31,8 @@ public class PersonalRecordResponseDTO {
     public PersonalRecordResponseDTO(PersonalRecord personalRecord) {
         this.id = personalRecord.getId();
         this.recordTitle = personalRecord.getRecordTitle();
+        this.userId = personalRecord.getUser().getId();
+        this.nickname = personalRecord.getNickname();
         this.createDT = personalRecord.getCreateDT();
         this.modifyDT = personalRecord.getModifyDT();
         this.spotResponseDTOList = personalRecord.getSpotList().stream().map(SpotResponseDTO::new).collect(Collectors.toList());

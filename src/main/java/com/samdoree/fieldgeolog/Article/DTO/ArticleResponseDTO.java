@@ -17,12 +17,16 @@ public class ArticleResponseDTO {
     private Long id;
     private PersonalRecordResponseDTO personalRecordResponseDTO;
     private String title;
+    private Long userId;
+    private String nickname;
     private LocalDateTime createDT;
 
     public ArticleResponseDTO(Article article, PersonalRecordResponseDTO personalRecordResponseDTO) {
         this.id = article.getId();
         this.personalRecordResponseDTO = personalRecordResponseDTO;
         this.title = personalRecordResponseDTO.getRecordTitle();
+        this.userId = personalRecordResponseDTO.getUserId();
+        this.nickname = personalRecordResponseDTO.getNickname();
         this.createDT = article.getCreateDT();
     }
 

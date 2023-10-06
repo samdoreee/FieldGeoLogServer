@@ -2,8 +2,10 @@ package com.samdoree.fieldgeolog.Comment.Entity;
 
 import com.samdoree.fieldgeolog.Article.Entity.Article;
 import com.samdoree.fieldgeolog.Comment.DTO.CommentRequestDTO;
+import com.samdoree.fieldgeolog.User.Entity.User;
+
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -28,6 +30,10 @@ public class Comment {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     private String nickName;
 
     @Column(columnDefinition = "TEXT")
@@ -40,13 +46,14 @@ public class Comment {
 
     private Boolean isValid;
 
-    public static Comment createFrom(Article article, CommentRequestDTO commentRequestDTO) throws Exception {
-        return new Comment(article, commentRequestDTO);
+    public static Comment createFrom(Article article, User user, CommentRequestDTO commentRequestDTO) throws Exception {
+        return new Comment(article, user, commentRequestDTO);
     }
 
-    private Comment(Article article, CommentRequestDTO commentRequestDTO) throws Exception {
+    private Comment(Article article, User user, CommentRequestDTO commentRequestDTO) throws Exception {
         this.article = article;
-        this.nickName = commentRequestDTO.getNickName();
+        this.user = user;
+        this.nickName = user.getNickName();
         this.content = commentRequestDTO.getContent();
         this.createDT = LocalDateTime.now();
         this.modifyDT = LocalDateTime.now();

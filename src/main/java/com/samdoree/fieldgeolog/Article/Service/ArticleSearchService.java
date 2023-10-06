@@ -37,7 +37,7 @@ public class ArticleSearchService {
 
         List<Article> validArticleList = articleRepository.findAll()
                 .stream()
-                .filter(article -> article.isValid())
+                .filter(Article::isValid)
                 .collect(Collectors.toList());
 
         return validArticleList.stream()
@@ -54,7 +54,7 @@ public class ArticleSearchService {
 
         List<Article> validArticleList = articleRepository.findAll(Sort.by(Sort.Direction.ASC, "createDT"))
                 .stream()
-                .filter(article -> article.isValid())
+                .filter(Article::isValid)
                 .collect(Collectors.toList());
 
         return validArticleList.stream()
@@ -71,7 +71,7 @@ public class ArticleSearchService {
 
         List<Article> validArticleList = articleRepository.findAll(Sort.by(Sort.Direction.DESC, "createDT"))
                 .stream()
-                .filter(article -> article.isValid())
+                .filter(Article::isValid)
                 .collect(Collectors.toList());
 
         return validArticleList.stream()
@@ -88,18 +88,36 @@ public class ArticleSearchService {
     public List<ArticleResponseDTO> searchByTitle(String keyword) {
 
         List<Article> validArticleList = articleRepository.findByTitleContaining(keyword)
-                .stream()
-                .filter(article -> article.isValid())
-                .collect(Collectors.toList());
+            .stream()
+            .filter(Article::isValid)
+            .collect(Collectors.toList());
 
         return validArticleList.stream()
-                .map(article -> {
-                    Long personalRecordId = article.getPersonalRecord().getId();
-                    PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
-                            .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
-                    return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
-                })
-                .collect(Collectors.toList());
+            .map(article -> {
+                Long personalRecordId = article.getPersonalRecord().getId();
+                PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                    .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+                return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
+            })
+            .collect(Collectors.toList());
+    }
+
+    // 닉네임 기반 검색
+    public List<ArticleResponseDTO> searchByNickname(String nickname) {
+
+        List<Article> validArticleList = articleRepository.findByNicknameContaining(nickname)
+            .stream()
+            .filter(Article::isValid)
+            .collect(Collectors.toList());
+
+        return validArticleList.stream()
+            .map(article -> {
+                Long personalRecordId = article.getPersonalRecord().getId();
+                PersonalRecord personalRecord = personalRecordRepository.findById(personalRecordId)
+                    .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
+                return new ArticleResponseDTO(article, PersonalRecordResponseDTO.from(personalRecord));
+            })
+            .collect(Collectors.toList());
     }
 
     // 검색 유형이 잘못된 경우 빈 목록을 반환하는 메서드
@@ -111,7 +129,7 @@ public class ArticleSearchService {
     public ArticleResponseDTO getOneArticle(Long articleId) {
 
         Article validArticle = articleRepository.findById(articleId)
-                .filter(article -> article.isValid())
+                .filter(Article::isValid)
                 .orElseThrow(() -> new NoSuchElementException("Article not found or is not valid."));
 
         Long personalRecordId = validArticle.getPersonalRecord().getId();

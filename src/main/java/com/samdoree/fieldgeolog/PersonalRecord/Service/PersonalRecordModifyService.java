@@ -24,7 +24,7 @@ public class PersonalRecordModifyService {
     public PersonalRecordResponseDTO modifyPersonalRecord(Long personalRecordId, PersonalRecordRequestDTO personalRecordRequestDTO) throws Exception {
 
         PersonalRecord validPersonalRecord = personalRecordRepository.findById(personalRecordId)
-                .filter(personalRecord -> personalRecord.isValid())
+                .filter(PersonalRecord::isValid)
                 .orElseThrow(() -> new NoSuchElementException("PersonalRecord not found or is not valid."));
 
         // 해당 PersonalRecord와 1:1 관계를 맺고 있는 Article isValid = false로 설정

@@ -24,14 +24,14 @@ public class ArticleRemoveService {
     public boolean removeArticle(Long articleId) {
 
         Article validArticle = articleRepository.findById(articleId)
-                .filter(article -> article.isValid())
+                .filter(Article::isValid)
                 .orElseThrow(() -> new NoSuchElementException("Article not found or is not valid."));
 
         // Article과 1:N 연관관계를 맺는 Comment 객체의 isValid 속성을 모두 false로 설정
         if (commentRepository.existsByArticleId(articleId)) {
             List<Comment> commentList = commentRepository.findAllByArticleId(articleId)
                     .stream()
-                    .filter(comment -> comment.isValid())
+                    .filter(Comment::isValid)
                     .collect(Collectors.toList());
 
             for (Comment comment : commentList) {
