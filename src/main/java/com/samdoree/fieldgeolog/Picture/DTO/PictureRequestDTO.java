@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PictureRequestDTO {
 
+    private String fileFolder;
     private String fileName;
-    private String filePath;
 }

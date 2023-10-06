@@ -32,7 +32,7 @@ public class PersonalRecordRegisterService {
 
         // PersonalRecord에 대한 Thumbnail 생성 및 연결
         Thumbnail thumbnail = thumbnailRegisterService.addPersonalRecordThumbnail(personalRecord, null);
-        personalRecord.setThumbnailPath(thumbnail.getFilePath());
+        personalRecord.setFileName(thumbnail.getFileName());
 
         // User 정보 입력
         Optional<User> optionalUser = userRepository.findById(personalRecordRequestDTO.getUserId());

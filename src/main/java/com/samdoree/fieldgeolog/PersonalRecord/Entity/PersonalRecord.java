@@ -38,7 +38,7 @@ public class PersonalRecord {
 
     @OneToOne(mappedBy = "personalRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private Thumbnail thumbnail;
-    private String thumbnailPath;
+    private String fileName;
 
     private Boolean isValid;
 
@@ -96,8 +96,8 @@ public class PersonalRecord {
 //        return newThumbnail;
 //    }
 
-    public void setThumbnailPath(String thumbnailPath) {
-        this.thumbnailPath = thumbnailPath;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     // 유효성 필드 메서드

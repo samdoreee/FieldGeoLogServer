@@ -33,7 +33,7 @@ public class Article {
     private final List<Comment> commentList = new ArrayList<>();
 
     // PersonalRecord에 등록된 썸네일 Path를 저장하기 위한 필드
-    private String thumbnailPath;
+    private String fileName;
 
     private String title;
 
@@ -60,8 +60,8 @@ public class Article {
         this.createDT = LocalDateTime.now();
         this.isValid = true;
 
-        // PersonalRecord에 등록된 썸네일 Path를 가져와서 저장
-        this.thumbnailPath = personalRecord.getThumbnailPath();
+        // PersonalRecord에 등록된 썸네일 경로를 가져와서 저장
+        this.fileName = personalRecord.getFileName();
     }
 
     //== 유효성 필드 메서드 ==//
