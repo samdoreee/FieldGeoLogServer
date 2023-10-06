@@ -1,8 +1,17 @@
 package com.samdoree.fieldgeolog.User.Entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import com.samdoree.fieldgeolog.Article.Entity.Article;
+import com.samdoree.fieldgeolog.Comment.Entity.Comment;
+import com.samdoree.fieldgeolog.PersonalRecord.Entity.PersonalRecord;
 import com.samdoree.fieldgeolog.User.DTO.UserRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +37,15 @@ public class User {
 	private String profileImage;
 
 	private Boolean isValid;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<PersonalRecord> personalRecordList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<Article> articleList = new ArrayList<>();
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<Comment> commentList = new ArrayList<>();
 
 	public static User createFrom(UserRequestDTO userRequestDTO){
 		return new User(userRequestDTO);
